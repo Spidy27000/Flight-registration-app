@@ -1,13 +1,4 @@
-OUT_DIR="out"
-LIB_DIR="lib"
-MAIN_FILE="MainApp"
-
-MYSQL_JAR="mysql-connector-java-8.3.0.jar"
-
 ./build.sh
+cd out
+java -cp .:out:../lib/mysql-connector-j-8.3.0.jar MainApp
 
-cd $OUT_DIR
-
-java -cp "../$OUT_DIR:../$LIB_DIR/$MYSQL_JAR" "$MAIN_FILE"
-
-cd ../
