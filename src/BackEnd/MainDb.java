@@ -22,12 +22,22 @@ public class MainDb {
     }
     return inst;
   }
-  /*
   public void close(){
     if (inst != null){
-      conn.close();
-      inst= null;
+      try{
+        conn.close();
+
+      } catch (SQLException e){
+        e.printStackTrace();
+      }
+      finally{
+        inst= null;
+      }
     }
   }
-  */
+  public void insert(){
+    ITable p = new Payment();
+    IData data = new DPayment(6,"df",3,3,4);
+    System.out.println(p.Insert(data));
+  }
 }
