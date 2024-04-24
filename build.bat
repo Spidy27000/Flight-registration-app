@@ -6,14 +6,10 @@ set MAIN_FILE=MainApp.java
 set MYSQL_JAR=mysql-connector-java-8.3.0.jar
 
 :: Compile frontEnd package
-for /R "%SRC_DIR%\FrontEnd" %%F in (*.java) do (
-    javac -d "%OUT_DIR%" -cp "%OUT_DIR%;%LIB_DIR%\%MYSQL_JAR%" "%%F"
-)
+javac -d "%OUT_DIR%" -cp "%OUT_DIR%;%LIB_DIR%\%MYSQL_JAR%" "%SRC_DIR%\FrontEnd\*.java"
 
 :: Compile backEnd package
-for /R "%SRC_DIR%\BackEnd" %%F in (*.java) do (
-    javac -d "%OUT_DIR%" -cp "%OUT_DIR%;%LIB_DIR%\%MYSQL_JAR%" "%%F"
-)
+javac -d "%OUT_DIR%" -cp "%OUT_DIR%;%LIB_DIR%\%MYSQL_JAR%" "%SRC_DIR%\BackEnd\*.java"
 
 :: Compile main class
 javac -d "%OUT_DIR%" -cp "%OUT_DIR%;%LIB_DIR%\%MYSQL_JAR%" "%SRC_DIR%\%MAIN_FILE%"
