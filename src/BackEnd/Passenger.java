@@ -1,53 +1,46 @@
 package BackEnd;
+
 import java.sql.*;
 
-class DBooking implements IData {
+class DPassenger implements IData {
   int id;
-  int economySeats;
-  int bussinessClassSeats;
-  int flightId;
-  int passengerId;
-  int paymentId;
+  String name;
+  int age;
+  Date dateOfBirth;
+  String address;
+  long phoneNo;
+  int passportNo
 
-  DBooking(int economySeats, int bussinessClassSeats, int flightId, int passengerId, int paymentId) {
-    this.economySeats = economySeats;
-    this.bussinessClassSeats = bussinessClassSeats;
-    this.flightId = flightId;
-    this.passengerId = passengerId;
-    this.paymentId = paymentId;
+  DPassenger(String name, int age, Date dateOfBirth, String address, long phoneNo, int passportNo) {
+    this.name = name;
+    this.age = age;
+    this.dateOfBirth = dateOfBirth;
+    this.address = address;
+    this.phoneNo = phoneNo;
+    this.passportNo = passportNo;
   }
 }
 
-public class Booking implements ITable {
+public class Passenger implements ITable {
+
   private static Connection conn;
 
-  Booking(Connection connection) {
+  Passenger(Connection connection) {
     conn = connection;
   }
 
   @Override
   public void Create() {
-
     Statement stmt = null;
-    String query = "CREATE TABLE IF NOT EXISTS Booking(" +
+
+    String query = "CREATE TABLE IF NOT EXISTS Passenger(" +
         "id INT AUTO_INCREMENT PRIMARY KEY," +
-        "economy_seats SMALLINT NOT NULL," +
-        "bussiness_class_seats SMALLINT NOT NULL," +
-        "flight_id int NOT NULL," +
-        "FOREIGN KEY (flight_id)" +
-        "   REFERENCES Flight(id)" +
-        "   ON DELETE CASCADE" +
-        "   ON UPDATE CASCADE," +
-        "passenger_id int NOT NULL," +
-        "FOREIGN KEY (passenger_id)" +
-        "   REFERENCES Passenger(id)" +
-        "   ON DELETE CASCADE" +
-        "   ON UPDATE CASCADE," +
-        "payment_id int NOT NULL," +
-        "FOREIGN KEY (payment_id)" +
-        "   REFERENCES Payment(id)" +
-        "   ON DELETE CASCADE" +
-        "   ON UPDATE CASCADE);";
+        "name VARCHAR(30) NOT NULL," +
+        "age SMALLINT NOT NULL," +
+        "date_of_birth DATE NOT NULL," +
+        "address TEXT NOT NULL," +
+        "phone_no NUMERIC(10) NOT NULL," +
+        "passport_no INT NOT NULL);";
 
     try {
       stmt = conn.createStatement();
@@ -73,19 +66,20 @@ public class Booking implements ITable {
     PreparedStatement pstmt = null;
     PreparedStatement stmt = null;
     ResultSet rs = null;
-    DBooking data = (DBooking) object;
+    DPassenger data = (DPassenger) object;
 
-    String insertQuery = "INSERT INTO Booking (economy_seats,bussness_class_seats,flight_id,passenger_id,payment_id) VALUES (?, ?, ?,?,?)";
+    String insertQuery = "INSERT INTO Passenger (name,age,date_of_birth,address,phone_no, passport_no) VALUES (?, ?, ?, ?, ?,?)";
     String idQuery = "SELECT LAST_INSERT_ID()";
 
     try {
       pstmt = conn.prepareStatement(insertQuery);
       stmt = conn.prepareStatement(idQuery);
-      pstmt.setInt(1, data.economySeats);
-      pstmt.setInt(2, data.bussinessClassSeats);
-      pstmt.setInt(3, data.flightId);
-      pstmt.setInt(4, data.passengerId);
-      pstmt.setInt(5, data.paymentId);
+      pstmt.setString(1, data.name);
+      pstmt.setInt(2, data.age);
+      pstmt.setDate(3, data.dateOfBirth);
+      pstmt.setString(4, data.address);
+      pstmt.setLong(5, data.phoneNo);
+      pstmt.setInt(6, data.passportNo);
 
       // Executing the insert query
       int rowsInserted = pstmt.executeUpdate();
@@ -112,10 +106,12 @@ public class Booking implements ITable {
       } catch (SQLException e) {
         e.printStackTrace();
       }
+
     } catch (SQLException e) {
       e.printStackTrace();
     }
     return data.id;
+
   }
 
   @Override
