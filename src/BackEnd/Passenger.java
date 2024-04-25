@@ -9,7 +9,7 @@ class DPassenger implements IData {
   Date dateOfBirth;
   String address;
   long phoneNo;
-  int passportNo
+  int passportNo;
 
   DPassenger(String name, int age, Date dateOfBirth, String address, long phoneNo, int passportNo) {
     this.name = name;

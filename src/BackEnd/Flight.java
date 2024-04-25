@@ -8,14 +8,14 @@ class DFlight implements IData {
   int bussinessClassSeats;
   String toLocation;
   String fromLocation;
-  int departureTime;
-  int arrivingTime;
+  Timestamp departureTime;
+  Timestamp arrivingTime;
   int economyPrice;
   int bussinessClassPrice;
   int planeId;
 
   DFlight(int economySeats, int bussinessClassSeats, int planeId, String toLocation, String fromLocation,
-      int departureTime, int arrivingTime, int bussinessClassPrice, int economyPrice) {
+      Timestamp departureTime, Timestamp arrivingTime, int bussinessClassPrice, int economyPrice) {
     this.economyPrice = economyPrice;
     this.bussinessClassPrice = bussinessClassPrice;
     this.economySeats = economySeats;
@@ -93,8 +93,8 @@ public class Flight implements ITable {
       pstmt.setString(4, data.fromLocation);
       pstmt.setInt(5, data.economyPrice);
       pstmt.setInt(6, data.bussinessClassPrice);
-      pstmt.setTimestamp(7, Timestamp.parse(data.departureTime));
-      pstmt.setTimestamp(8, Timestamp.parse(data.arrivingTime));
+      pstmt.setTimestamp(7, data.departureTime);
+      pstmt.setTimestamp(8, data.arrivingTime);
       pstmt.setInt(9, data.planeId);
 
       // Executing the insert query

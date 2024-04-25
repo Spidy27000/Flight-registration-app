@@ -1,11 +1,8 @@
 import BackEnd.*;
-import FrontEnd.*;
+import FrontEnd.LoginPage;
 
-public class MainApp{
-  public static void main(String args []){
-    MainDb db =  MainDb.getInst();
-    db.insert();
+public class MainApp {
+  public static void main(String args[]) {
+    new LoginPage();
   }
 }
-
-
