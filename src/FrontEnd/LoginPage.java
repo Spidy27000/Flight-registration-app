@@ -33,13 +33,13 @@ public class LoginPage extends JPanel implements ActionListener {
   }
 
   public void setLocationAndSize() {
-    userLabel.setBounds(50, 150, 100, 30);
-    passwordLabel.setBounds(50, 220, 100, 30);
-    userTextField.setBounds(150, 150, 150, 30);
-    passwordField.setBounds(150, 220, 150, 30);
-    showPassword.setBounds(150, 250, 150, 30);
-    loginButton.setBounds(50, 300, 100, 30);
-    signUpButton.setBounds(200, 300, 100, 30);
+    userLabel.setBounds(620, 290, 100, 30);
+    passwordLabel.setBounds(620, 360, 100, 30);
+    userTextField.setBounds(720, 290, 150, 30);
+    passwordField.setBounds(720, 360, 150, 30);
+    showPassword.setBounds(720, 390, 150, 30);
+    loginButton.setBounds(620, 430, 100, 30);
+    signUpButton.setBounds(770, 430, 100, 30);
 
   }
 
