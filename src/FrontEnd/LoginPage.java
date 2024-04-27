@@ -1,15 +1,18 @@
 package FrontEnd;
 
 import javax.swing.*;
+
+import BackEnd.Db;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 
-public class LoginPage extends JFrame implements ActionListener {
+public class LoginPage extends JPanel implements ActionListener {
   private static final long serialVersionUID = 1L;
 
-  Container container = getContentPane();
+  Container container;
   JLabel userLabel = new JLabel("USERNAME");
   JLabel passwordLabel = new JLabel("PASSWORD");
   JTextField userTextField = new JTextField();
@@ -17,18 +20,20 @@ public class LoginPage extends JFrame implements ActionListener {
   JButton loginButton = new JButton("LOGIN");
   JButton signUpButton = new JButton("Sign up");
   JCheckBox showPassword = new JCheckBox("Show Password");
+  Db db = Db.getInst();
+  MainFrontApp app;
 
-  public LoginPage() {
+  public LoginPage(MainFrontApp app) {
+    // frame.setBounds(10, 10, 370, 600);
+    // frame.setResizable(false);
+    this.app = app;
+    this.container = app.getContentPane();
     setLayoutManager();
     setLocationAndSize();
     addComponentsToContainer();
     addActionEvent();
-    setTitle("Login Form");
-    setVisible(true);
-    // frame.setBounds(10, 10, 370, 600);
-    setSize(370, 600);
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    // frame.setResizable(false);
+    this.db.insertUser();
+    
 
   }
 
@@ -72,7 +77,7 @@ public class LoginPage extends JFrame implements ActionListener {
       char[] passwordChars = passwordField.getPassword();
       pwdText = new String(passwordChars);
       Arrays.fill(passwordChars, ' ');
-      if (userText.equalsIgnoreCase("mehtab") && pwdText.equalsIgnoreCase("12345")) {
+      if (this.db.doesUserExist(userText, pwdText)) {
         JOptionPane.showMessageDialog(this, "Login Successful");
       } else {
         JOptionPane.showMessageDialog(this, "Invalid Username or Password");

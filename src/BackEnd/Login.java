@@ -2,13 +2,14 @@ package BackEnd;
 
 import java.sql.*;
 
-class DLogin implements IData {
+class DLogin extends IData {
   int id;
   String email;
   String password;
   int passengerId;
 
   DLogin(String email, String password, int passengerId) {
+    this.id = 0;
     this.email = email;
     this.password = password;
     this.passengerId = passengerId;
@@ -53,7 +54,7 @@ public class Login implements ITable {
   }
 
   @Override
-  public int Insert(IData object) {
+  public void Insert(IData object) {
 
     PreparedStatement pstmt = null;
     PreparedStatement stmt = null;
@@ -99,7 +100,6 @@ public class Login implements ITable {
         e.printStackTrace();
       }
     }
-    return data.id;
   }
 
   @Override

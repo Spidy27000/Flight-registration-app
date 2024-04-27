@@ -2,7 +2,7 @@ package BackEnd;
 
 import java.sql.*;
 
-class DBooking implements IData {
+class DBooking extends IData {
   int id;
   int economySeats;
   int bussinessClassSeats;
@@ -11,6 +11,7 @@ class DBooking implements IData {
   int paymentId;
 
   DBooking(int economySeats, int bussinessClassSeats, int flightId, int passengerId, int paymentId) {
+    this.id = 0;
     this.economySeats = economySeats;
     this.bussinessClassSeats = bussinessClassSeats;
     this.flightId = flightId;
@@ -69,7 +70,7 @@ public class Booking implements ITable {
   }
 
   @Override
-  public int Insert(IData object) {
+  public void Insert(IData object) {
 
     PreparedStatement pstmt = null;
     PreparedStatement stmt = null;
@@ -117,7 +118,6 @@ public class Booking implements ITable {
         e.printStackTrace();
       }
     }
-    return data.id;
   }
 
   @Override

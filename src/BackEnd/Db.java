@@ -53,8 +53,51 @@ public class Db {
     }
   }
 
-  public void insert() {
-    //IData data = new DRegistration("name", 122, Date.valueOf("1999-05-15"), "paa nahi", 1234567890);
-    //System.out.println(tables[Table.PASSENGER.val].Insert(data));
+  public int insertUser() {
+
+    IData passenger = new DPassenger("name", 122, Date.valueOf("1999-05-15"), "paa nahi", 1234567890,234);
+    tables[Table.PASSENGER.val].Insert(passenger);
+    System.out.println(passenger.id);
+    IData login = new DLogin("tanish", "tanish", passenger.id);
+    tables[Table.LOGIN.val].Insert(login);
+    return login.id;
+    // System.out.println(tables[Table.PASSENGER.val].Insert(data));
+  }
+
+  public boolean doesUserExist(String email, String password) {
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+    boolean ret = false;
+    String query = "SELECT 1 FROM Login where email = ? AND password = ?";
+    try {
+      pstmt = conn.prepareStatement(query);
+
+      pstmt.setString(1, email);
+      pstmt.setString(2, password);
+      rs = pstmt.executeQuery();
+      int i;
+      if (rs.next()) {
+
+        i = rs.getInt(1);
+        if (i== 1) {
+          ret = true;
+        }
+      }
+
+    } catch (SQLException e) {
+      e.getStackTrace();
+    } finally {
+      try {
+        if (pstmt == null) {
+          pstmt.close();
+        }
+        if (rs == null) {
+          rs.close();
+        }
+      } catch (SQLException e) {
+        e.getStackTrace();
+      }
+    }
+    return ret;
   }
 }

@@ -15,14 +15,15 @@ enum Table {
   }
 }
 
-interface IData {
+abstract class IData {
+  int id;
 }
 
 interface ITable {
   // Creates table
   void Create();
 
-  int Insert(IData data);
+  void Insert(IData data);
 
   void Update(int id, IData data);
 

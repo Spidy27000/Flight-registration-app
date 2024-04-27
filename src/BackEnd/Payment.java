@@ -2,13 +2,14 @@ package BackEnd;
 
 import java.sql.*;
 
-class DPayment implements IData {
+class DPayment extends IData {
   int id;
   int ammount;
   String mode;
   int passengerId;
 
   DPayment(String mode, int ammount, int passengerId) {
+    this.id = 0;
     this.mode = mode;
     this.ammount = ammount;
     this.passengerId = passengerId;
@@ -55,7 +56,7 @@ public class Payment implements ITable {
   }
 
   @Override
-  public int Insert(IData object) {
+  public void Insert(IData object) {
 
     PreparedStatement pstmt = null;
     PreparedStatement stmt = null;
@@ -101,7 +102,6 @@ public class Payment implements ITable {
         e.printStackTrace();
       }
     }
-    return data.id;
   }
 
   @Override

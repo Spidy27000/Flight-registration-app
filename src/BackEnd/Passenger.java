@@ -2,7 +2,7 @@ package BackEnd;
 
 import java.sql.*;
 
-class DPassenger implements IData {
+class DPassenger extends IData {
   int id;
   String name;
   int age;
@@ -12,6 +12,7 @@ class DPassenger implements IData {
   int passportNo;
 
   DPassenger(String name, int age, Date dateOfBirth, String address, long phoneNo, int passportNo) {
+    this.id = 0;
     this.name = name;
     this.age = age;
     this.dateOfBirth = dateOfBirth;
@@ -61,7 +62,7 @@ public class Passenger implements ITable {
   }
 
   @Override
-  public int Insert(IData object) {
+  public void Insert(IData object) {
 
     PreparedStatement pstmt = null;
     PreparedStatement stmt = null;
@@ -90,8 +91,8 @@ public class Passenger implements ITable {
         // If the insertion was successful, retrieving the ID of the newly inserted row
         rs = stmt.executeQuery();
         if (rs.next()) {
-          data.id = rs.getInt(1);
-          System.out.println("New row inserted with ID: " + data.id);
+          object.id = rs.getInt(1);
+          System.out.println("New row inserted with ID: " + object.id);
         }
       }
     } catch (SQLException e) {
@@ -112,7 +113,6 @@ public class Passenger implements ITable {
         e.printStackTrace();
       }
     }
-    return data.id;
   }
 
   @Override

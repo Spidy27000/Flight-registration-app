@@ -2,7 +2,7 @@ package BackEnd;
 
 import java.sql.*;
 
-class DPlane implements IData {
+class DPlane extends IData {
   int id;
   String name;
   int economySeats;
@@ -10,6 +10,7 @@ class DPlane implements IData {
 
   DPlane(String name, int economySeats, int bussinessClassSeats) {
     this.name = name;
+    this.id = 0;
     this.economySeats = economySeats;
     this.bussinessClassSeats = bussinessClassSeats;
   }
@@ -50,7 +51,7 @@ public class Plane implements ITable {
   }
 
   @Override
-  public int Insert(IData object) {
+  public void Insert(IData object) {
 
     PreparedStatement pstmt = null;
     PreparedStatement stmt = null;
@@ -96,7 +97,6 @@ public class Plane implements ITable {
         e.printStackTrace();
       }
     }
-    return data.id;
   }
 
   @Override

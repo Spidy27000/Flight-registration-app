@@ -1,8 +1,8 @@
 import BackEnd.*;
-import FrontEnd.LoginPage;
+import FrontEnd.MainFrontApp;
 
 public class MainApp {
   public static void main(String args[]) {
-    new LoginPage();
+    new MainFrontApp();
   }
 }
