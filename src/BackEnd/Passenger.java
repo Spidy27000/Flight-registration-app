@@ -9,7 +9,7 @@ class DPassenger implements IData {
   Date dateOfBirth;
   String address;
   long phoneNo;
-  int passportNo;
+  int passportNo
 
   DPassenger(String name, int age, Date dateOfBirth, String address, long phoneNo, int passportNo) {
     this.name = name;
@@ -72,8 +72,10 @@ public class Passenger implements ITable {
     String idQuery = "SELECT LAST_INSERT_ID()";
 
     try {
+
       pstmt = conn.prepareStatement(insertQuery);
       stmt = conn.prepareStatement(idQuery);
+
       pstmt.setString(1, data.name);
       pstmt.setInt(2, data.age);
       pstmt.setDate(3, data.dateOfBirth);
@@ -92,6 +94,9 @@ public class Passenger implements ITable {
           System.out.println("New row inserted with ID: " + data.id);
         }
       }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
 
       try {
         if (pstmt != null) {
@@ -106,21 +111,64 @@ public class Passenger implements ITable {
       } catch (SQLException e) {
         e.printStackTrace();
       }
-
-    } catch (SQLException e) {
-      e.printStackTrace();
     }
     return data.id;
-
   }
 
   @Override
   public void Update(int id, IData data) {
 
+    PreparedStatement pstmt = null;
+    DPassenger data = (DPassenger) object;
+
+    String insertQuery = "UPDATE Passenger SET name = ?, age = ?, date_of_birth = ?, address = ?, phone_no = ?, passport_no = ? WHERE id = ?";
+
+    try {
+      pstmt = conn.prepareStatement(insertQuery);
+
+      pstmt.setString(1, data.name);
+      pstmt.setInt(2, data.age);
+      pstmt.setDate(3, data.dateOfBirth);
+      pstmt.setString(4, data.address);
+      pstmt.setLong(5, data.phoneNo);
+      pstmt.setInt(6, data.passportNo);
+      pstmt.setInt(7, id);
+
+      // Executing the insert query
+      int rowsInserted = pstmt.executeUpdate();
+
+      try {
+        if (pstmt != null) {
+          pstmt.close();
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
   }
 
   @Override
   public void Delete(int id) {
+    String query = "DELETE FROM Passenger WHERE id = ?";
+    PreparedStatement stmt = null;
 
+    try () {
+      stmt = conn.prepareStatement(query);
+      stmt.setInt(1, id);
+      int rowsAffected = stmt.executeUpdate();
+      System.out.println("Rows affected: " + rowsAffected);
+
+    } catch (SQLException e) { 
+      e.printStackTrace();
+    } finally {
+
+    if (stmt == null){
+      try(){
+        stmt.close();
+        } catch (SQLException e) { 
+        e.printStackTrace();
+        }
+      }
+    }
   }
 }

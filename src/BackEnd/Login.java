@@ -81,6 +81,9 @@ public class Login implements ITable {
           System.out.println("New row inserted with ID: " + data.id);
         }
       }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
 
       try {
         if (pstmt != null) {
@@ -95,8 +98,6 @@ public class Login implements ITable {
       } catch (SQLException e) {
         e.printStackTrace();
       }
-    } catch (SQLException e) {
-      e.printStackTrace();
     }
     return data.id;
   }
@@ -104,10 +105,57 @@ public class Login implements ITable {
   @Override
   public void Update(int id, IData data) {
 
+    PreparedStatement pstmt = null;
+    DLogin data = (DLogin) object;
+
+    String insertQuery = "UPDATE Login SET email = ?, password = ?, passenger_id = ? WHERE id = ?"
+
+    try {
+      pstmt = conn.prepareStatement(insertQuery);
+      stmt = conn.prepareStatement(idQuery);
+      pstmt.setString(1, data.email);
+      pstmt.setString(2, data.password);
+      pstmt.setInt(3, data.passengerId);
+      pstmt.setInt(4, id);
+
+      // Executing the insert query
+      int rowsInserted = pstmt.executeUpdate();
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (pstmt != null) {
+          pstmt.close();
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
   }
 
   @Override
   public void Delete(int id) {
+    String query = "DELETE FROM Login WHERE id = ?";
+    PreparedStatement stmt = null;
 
+    try () {
+      stmt = conn.prepareStatement(query);
+      stmt.setInt(1, id);
+      int rowsAffected = stmt.executeUpdate();
+      System.out.println("Rows affected: " + rowsAffected);
+
+    } catch (SQLException e) { 
+      e.printStackTrace();
+    } finally {
+
+    if (stmt == null){
+      try(){
+        stmt.close();
+        } catch (SQLException e) { 
+        e.printStackTrace();
+        }
+      }
+    }
   }
 }

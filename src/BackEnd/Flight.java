@@ -8,14 +8,14 @@ class DFlight implements IData {
   int bussinessClassSeats;
   String toLocation;
   String fromLocation;
-  Timestamp departureTime;
-  Timestamp arrivingTime;
+  int departureTime;
+  int arrivingTime;
   int economyPrice;
   int bussinessClassPrice;
   int planeId;
 
   DFlight(int economySeats, int bussinessClassSeats, int planeId, String toLocation, String fromLocation,
-      Timestamp departureTime, Timestamp arrivingTime, int bussinessClassPrice, int economyPrice) {
+      int departureTime, int arrivingTime, int bussinessClassPrice, int economyPrice) {
     this.economyPrice = economyPrice;
     this.bussinessClassPrice = bussinessClassPrice;
     this.economySeats = economySeats;
@@ -93,8 +93,8 @@ public class Flight implements ITable {
       pstmt.setString(4, data.fromLocation);
       pstmt.setInt(5, data.economyPrice);
       pstmt.setInt(6, data.bussinessClassPrice);
-      pstmt.setTimestamp(7, data.departureTime);
-      pstmt.setTimestamp(8, data.arrivingTime);
+      pstmt.setTimestamp(7, Timestamp.parse(data.departureTime));
+      pstmt.setTimestamp(8, Timestamp.parse(data.arrivingTime));
       pstmt.setInt(9, data.planeId);
 
       // Executing the insert query
@@ -108,6 +108,9 @@ public class Flight implements ITable {
           System.out.println("New row inserted with ID: " + data.id);
         }
       }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
 
       try {
         if (pstmt != null) {
@@ -122,19 +125,72 @@ public class Flight implements ITable {
       } catch (SQLException e) {
         e.printStackTrace();
       }
-    } catch (SQLException e) {
-      e.printStackTrace();
     }
-    return data.id;
   }
 
   @Override
   public void Update(int id, IData data) {
 
+    PreparedStatement pstmt = null;
+    DFlight data = (DFlight) object;
+
+    String updateQuery = "UPDATE Flight SET economy_seats = ?, bussness_class_seats = ?, to_location = ?, from_loaction = ?, economy_prize = ?, bussness_class_prize = ?, departure_time = ?, arriving_time = ?, plane_id = ? WHERE id = ?";
+
+    try {
+      pstmt = conn.prepareStatement(insertQuery);
+      stmt = conn.prepareStatement(idQuery);
+      pstmt.setInt(1, data.economySeats);
+      pstmt.setInt(2, data.bussinessClassSeats);
+      pstmt.setString(3, data.toLocation);
+      pstmt.setString(4, data.fromLocation);
+      pstmt.setInt(5, data.economyPrice);
+      pstmt.setInt(6, data.bussinessClassPrice);
+      pstmt.setTimestamp(7, Timestamp.parse(data.departureTime));
+      pstmt.setTimestamp(8, Timestamp.parse(data.arrivingTime));
+      pstmt.setInt(9, data.planeId);
+      pstmt.setInt(10,id)
+
+      // Executing the insert query
+      int rowsInserted = pstmt.executeUpdate();
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+
+      try {
+        if (pstmt != null) {
+          pstmt.close();
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+    return data.id;
   }
 
   @Override
   public void Delete(int id) {
+    String query = "DELETE FROM Flight WHERE id = ?";
+    PreparedStatement stmt = null;
 
+    try () {
+      stmt = conn.prepareStatement(query);
+      stmt.setInt(1, id);
+      int rowsAffected = stmt.executeUpdate();
+      System.out.println("Rows affected: " + rowsAffected);
+
+    } catch (SQLException e) { 
+      e.printStackTrace();
+    } finally {
+
+    if (stmt == null){
+      try(){
+        stmt.close();
+        } catch (SQLException e) { 
+        e.printStackTrace();
+        }
+      }
+    }
   }
+
 }

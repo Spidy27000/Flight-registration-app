@@ -1,4 +1,5 @@
 package BackEnd;
+
 import java.sql.*;
 
 class DBooking implements IData {
@@ -98,6 +99,9 @@ public class Booking implements ITable {
           System.out.println("New row inserted with ID: " + data.id);
         }
       }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
 
       try {
         if (pstmt != null) {
@@ -112,8 +116,6 @@ public class Booking implements ITable {
       } catch (SQLException e) {
         e.printStackTrace();
       }
-    } catch (SQLException e) {
-      e.printStackTrace();
     }
     return data.id;
   }
@@ -121,10 +123,59 @@ public class Booking implements ITable {
   @Override
   public void Update(int id, IData data) {
 
+    PreparedStatement pstmt = null;
+    DBooking data = (DBooking) object;
+
+    String updateQuery = "UPDATE Booking SET economy_seats = ?, bussness_class_seats = ?, flight_id = ?, passenger_id = ?, payment_id = ? WHERE id = ?";
+
+    try {
+      pstmt = conn.prepareStatement(updateQuery);
+      pstmt.setInt(1, data.economySeats);
+      pstmt.setInt(2, data.bussinessClassSeats);
+      pstmt.setInt(3, data.flightId);
+      pstmt.setInt(4, data.passengerId);
+      pstmt.setInt(5, data.paymentId);
+      pstmt.setInt(6, id);
+
+      // Executing the insert query
+      int rowsInserted = pstmt.executeUpdate();
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+
+      try {
+        if (pstmt != null) {
+          pstmt.close();
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
   }
 
   @Override
   public void Delete(int id) {
+    String query = "DELETE FROM Booking WHERE id = ?";
+    PreparedStatement stmt = null;
 
+    try () {
+      stmt = conn.prepareStatement(query);
+      stmt.setInt(1, id);
+      int rowsAffected = stmt.executeUpdate();
+      System.out.println("Rows affected: " + rowsAffected);
+
+    } catch (SQLException e) { 
+      e.printStackTrace();
+    } finally {
+
+    if (stmt == null){
+      try(){
+        stmt.close();
+        } catch (SQLException e) { 
+        e.printStackTrace();
+        }
+      }
+    }
   }
 }

@@ -2,15 +2,15 @@ package BackEnd;
 
 import java.sql.*;
 
-public class MainDb {
-  private static MainDb inst;
+public class Db {
+  private static Db inst;
   private Connection conn;
   private static final String JDBC_URL = "jdbc:mysql://localhost:3306/FlightDb";
   private static final String USERNAME = "root";
   private static final String PASSWORD = "password";
   private static ITable[] tables = new ITable[6];
 
-  private MainDb() {
+  private Db() {
     try {
       conn = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD);
       System.out.println("Database is connected");
@@ -27,9 +27,9 @@ public class MainDb {
 
   }
 
-  public static MainDb getInst() {
+  public static Db getInst() {
     if (inst == null) {
-      inst = new MainDb();
+      inst = new Db();
     }
     return inst;
   }
@@ -54,7 +54,7 @@ public class MainDb {
   }
 
   public void insert() {
-    IData data = new DPassenger("name", 122, Date.valueOf("1999-05-15"), "paa nahi", 1234567890, 243);
+    IData data = new DRegistration("name", 122, Date.valueOf("1999-05-15"), "paa nahi", 1234567890);
     System.out.println(tables[Table.PASSENGER.val].Insert(data));
   }
 }
