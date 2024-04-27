@@ -4,7 +4,6 @@ import javax.swing.*;
 
 import BackEnd.Db;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
@@ -12,7 +11,6 @@ import java.util.Arrays;
 public class LoginPage extends JPanel implements ActionListener {
   private static final long serialVersionUID = 1L;
 
-  Container container;
   JLabel userLabel = new JLabel("USERNAME");
   JLabel passwordLabel = new JLabel("PASSWORD");
   JTextField userTextField = new JTextField();
@@ -27,18 +25,11 @@ public class LoginPage extends JPanel implements ActionListener {
     // frame.setBounds(10, 10, 370, 600);
     // frame.setResizable(false);
     this.app = app;
-    this.container = app.getContentPane();
-    setLayoutManager();
+    setLayout(null);
     setLocationAndSize();
-    addComponentsToContainer();
     addActionEvent();
-    this.db.insertUser();
-    
-
-  }
-
-  public void setLayoutManager() {
-    container.setLayout(null);
+    addComponentsToContainer();
+    setVisible(true);
   }
 
   public void setLocationAndSize() {
@@ -53,13 +44,13 @@ public class LoginPage extends JPanel implements ActionListener {
   }
 
   public void addComponentsToContainer() {
-    container.add(userLabel);
-    container.add(passwordLabel);
-    container.add(userTextField);
-    container.add(passwordField);
-    container.add(showPassword);
-    container.add(loginButton);
-    container.add(signUpButton);
+    add(userLabel);
+    add(passwordLabel);
+    add(userTextField);
+    add(passwordField);
+    add(showPassword);
+    add(loginButton);
+    add(signUpButton);
   }
 
   public void addActionEvent() {
@@ -85,9 +76,7 @@ public class LoginPage extends JPanel implements ActionListener {
 
     }
     if (e.getSource() == signUpButton) {
-      // TODO: Add navigation
-      userTextField.setText("");
-      passwordField.setText("");
+      app.showSignUp();
     }
     if (e.getSource() == showPassword) {
       if (showPassword.isSelected()) {
