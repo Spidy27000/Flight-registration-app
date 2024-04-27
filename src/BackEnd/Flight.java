@@ -8,14 +8,14 @@ class DFlight implements IData {
   int bussinessClassSeats;
   String toLocation;
   String fromLocation;
-  int departureTime;
-  int arrivingTime;
+  Timestamp departureTime;
+  Timestamp arrivingTime;
   int economyPrice;
   int bussinessClassPrice;
   int planeId;
 
   DFlight(int economySeats, int bussinessClassSeats, int planeId, String toLocation, String fromLocation,
-      int departureTime, int arrivingTime, int bussinessClassPrice, int economyPrice) {
+      Timestamp departureTime, Timestamp arrivingTime, int bussinessClassPrice, int economyPrice) {
     this.economyPrice = economyPrice;
     this.bussinessClassPrice = bussinessClassPrice;
     this.economySeats = economySeats;
@@ -93,8 +93,8 @@ public class Flight implements ITable {
       pstmt.setString(4, data.fromLocation);
       pstmt.setInt(5, data.economyPrice);
       pstmt.setInt(6, data.bussinessClassPrice);
-      pstmt.setTimestamp(7, Timestamp.parse(data.departureTime));
-      pstmt.setTimestamp(8, Timestamp.parse(data.arrivingTime));
+      pstmt.setTimestamp(7,data.departureTime );
+      pstmt.setTimestamp(8, data.arrivingTime);
       pstmt.setInt(9, data.planeId);
 
       // Executing the insert query
@@ -126,10 +126,11 @@ public class Flight implements ITable {
         e.printStackTrace();
       }
     }
+    return data.id;
   }
 
   @Override
-  public void Update(int id, IData data) {
+  public void Update(int id, IData object) {
 
     PreparedStatement pstmt = null;
     DFlight data = (DFlight) object;
@@ -137,18 +138,18 @@ public class Flight implements ITable {
     String updateQuery = "UPDATE Flight SET economy_seats = ?, bussness_class_seats = ?, to_location = ?, from_loaction = ?, economy_prize = ?, bussness_class_prize = ?, departure_time = ?, arriving_time = ?, plane_id = ? WHERE id = ?";
 
     try {
-      pstmt = conn.prepareStatement(insertQuery);
-      stmt = conn.prepareStatement(idQuery);
+      pstmt = conn.prepareStatement(updateQuery);
+
       pstmt.setInt(1, data.economySeats);
       pstmt.setInt(2, data.bussinessClassSeats);
       pstmt.setString(3, data.toLocation);
       pstmt.setString(4, data.fromLocation);
       pstmt.setInt(5, data.economyPrice);
       pstmt.setInt(6, data.bussinessClassPrice);
-      pstmt.setTimestamp(7, Timestamp.parse(data.departureTime));
-      pstmt.setTimestamp(8, Timestamp.parse(data.arrivingTime));
+      pstmt.setTimestamp(7, data.departureTime);
+      pstmt.setTimestamp(8, data.arrivingTime);
       pstmt.setInt(9, data.planeId);
-      pstmt.setInt(10,id)
+      pstmt.setInt(10,id);
 
       // Executing the insert query
       int rowsInserted = pstmt.executeUpdate();
@@ -165,7 +166,6 @@ public class Flight implements ITable {
         e.printStackTrace();
       }
     }
-    return data.id;
   }
 
   @Override
@@ -173,7 +173,7 @@ public class Flight implements ITable {
     String query = "DELETE FROM Flight WHERE id = ?";
     PreparedStatement stmt = null;
 
-    try () {
+    try  {
       stmt = conn.prepareStatement(query);
       stmt.setInt(1, id);
       int rowsAffected = stmt.executeUpdate();
@@ -184,7 +184,7 @@ public class Flight implements ITable {
     } finally {
 
     if (stmt == null){
-      try(){
+      try{
         stmt.close();
         } catch (SQLException e) { 
         e.printStackTrace();

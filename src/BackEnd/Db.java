@@ -54,7 +54,7 @@ public class Db {
   }
 
   public void insert() {
-    IData data = new DRegistration("name", 122, Date.valueOf("1999-05-15"), "paa nahi", 1234567890);
-    System.out.println(tables[Table.PASSENGER.val].Insert(data));
+    //IData data = new DRegistration("name", 122, Date.valueOf("1999-05-15"), "paa nahi", 1234567890);
+    //System.out.println(tables[Table.PASSENGER.val].Insert(data));
   }
 }

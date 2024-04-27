@@ -105,7 +105,7 @@ public class Payment implements ITable {
   }
 
   @Override
-  public void Update(int id, IData data) {
+  public void Update(int id, IData object) {
 
     PreparedStatement pstmt = null;
     DPayment data = (DPayment) object;
@@ -141,7 +141,7 @@ public class Payment implements ITable {
     String query = "DELETE FROM Payment WHERE id = ?";
     PreparedStatement stmt = null;
 
-    try () {
+    try  {
       stmt = conn.prepareStatement(query);
       stmt.setInt(1, id);
       int rowsAffected = stmt.executeUpdate();
@@ -152,7 +152,7 @@ public class Payment implements ITable {
     } finally {
 
     if (stmt == null){
-      try(){
+      try{
         stmt.close();
         } catch (SQLException e) { 
         e.printStackTrace();

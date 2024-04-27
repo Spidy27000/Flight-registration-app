@@ -100,7 +100,7 @@ public class Plane implements ITable {
   }
 
   @Override
-  public void Update(int id, IData data) {
+  public void Update(int id, IData object) {
 
     PreparedStatement pstmt = null;
     DPlane data = (DPlane) object;
@@ -137,7 +137,7 @@ public class Plane implements ITable {
     String query = "DELETE FROM Plane WHERE id = ?";
     PreparedStatement stmt = null;
 
-    try () {
+    try  {
       stmt = conn.prepareStatement(query);
       stmt.setInt(1, id);
       int rowsAffected = stmt.executeUpdate();
@@ -148,7 +148,7 @@ public class Plane implements ITable {
     } finally {
 
     if (stmt == null){
-      try(){
+      try{
         stmt.close();
         } catch (SQLException e) { 
         e.printStackTrace();

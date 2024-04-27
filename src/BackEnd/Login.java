@@ -103,16 +103,16 @@ public class Login implements ITable {
   }
 
   @Override
-  public void Update(int id, IData data) {
+  public void Update(int id, IData object) {
 
     PreparedStatement pstmt = null;
     DLogin data = (DLogin) object;
 
-    String insertQuery = "UPDATE Login SET email = ?, password = ?, passenger_id = ? WHERE id = ?"
+    String insertQuery = "UPDATE Login SET email = ?, password = ?, passenger_id = ? WHERE id = ?";
 
     try {
       pstmt = conn.prepareStatement(insertQuery);
-      stmt = conn.prepareStatement(idQuery);
+
       pstmt.setString(1, data.email);
       pstmt.setString(2, data.password);
       pstmt.setInt(3, data.passengerId);
@@ -139,7 +139,7 @@ public class Login implements ITable {
     String query = "DELETE FROM Login WHERE id = ?";
     PreparedStatement stmt = null;
 
-    try () {
+    try {
       stmt = conn.prepareStatement(query);
       stmt.setInt(1, id);
       int rowsAffected = stmt.executeUpdate();
@@ -150,7 +150,7 @@ public class Login implements ITable {
     } finally {
 
     if (stmt == null){
-      try(){
+      try{
         stmt.close();
         } catch (SQLException e) { 
         e.printStackTrace();

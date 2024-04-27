@@ -9,7 +9,7 @@ class DPassenger implements IData {
   Date dateOfBirth;
   String address;
   long phoneNo;
-  int passportNo
+  int passportNo;
 
   DPassenger(String name, int age, Date dateOfBirth, String address, long phoneNo, int passportNo) {
     this.name = name;
@@ -116,7 +116,7 @@ public class Passenger implements ITable {
   }
 
   @Override
-  public void Update(int id, IData data) {
+  public void Update(int id, IData object) {
 
     PreparedStatement pstmt = null;
     DPassenger data = (DPassenger) object;
@@ -135,8 +135,14 @@ public class Passenger implements ITable {
       pstmt.setInt(7, id);
 
       // Executing the insert query
-      int rowsInserted = pstmt.executeUpdate();
+      final int rowsInserted = pstmt.executeUpdate();
+    
+       }
 
+      catch(SQLException e ){
+        e.printStackTrace();
+      }
+      finally{
       try {
         if (pstmt != null) {
           pstmt.close();
@@ -152,7 +158,7 @@ public class Passenger implements ITable {
     String query = "DELETE FROM Passenger WHERE id = ?";
     PreparedStatement stmt = null;
 
-    try () {
+    try  {
       stmt = conn.prepareStatement(query);
       stmt.setInt(1, id);
       int rowsAffected = stmt.executeUpdate();
@@ -163,7 +169,7 @@ public class Passenger implements ITable {
     } finally {
 
     if (stmt == null){
-      try(){
+      try{
         stmt.close();
         } catch (SQLException e) { 
         e.printStackTrace();
