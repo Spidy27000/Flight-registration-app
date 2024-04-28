@@ -10,6 +10,7 @@ import java.util.Arrays;
 
 public class LoginPage extends JPanel implements ActionListener {
   private static final long serialVersionUID = 1L;
+  
 
   JLabel userLabel = new JLabel("USERNAME");
   JLabel passwordLabel = new JLabel("PASSWORD");
@@ -30,6 +31,9 @@ public class LoginPage extends JPanel implements ActionListener {
     addActionEvent();
     addComponentsToContainer();
     setVisible(true);
+    JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+    frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    frame.setVisible(true);
   }
 
   public void setLocationAndSize() {

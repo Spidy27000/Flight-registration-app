@@ -18,6 +18,7 @@ class Panel_1 extends JPanel implements ActionListener {
     JLabel ecopriceLabel = new JLabel("ECONOMY PRICE:");
     JLabel buspriceLabel = new JLabel("BUSINESS PRICE:");
     JButton bookButton = new JButton("BOOK");
+    JLabel dateLabel = new JLabel("DATE:");
 
     public Panel_1() {
         Border border = BorderFactory.createLineBorder(Color.BLACK, 2);
@@ -30,14 +31,15 @@ class Panel_1 extends JPanel implements ActionListener {
     }
 
     public void setLocationAndSize() {
-        flightLabel.setBounds(100, 00, 100, 30);
-        FromLabel.setBounds(100, 170, 100, 30);
-        ToLabel.setBounds(100, 240, 100, 30);
-        departureLabel.setBounds(100, 310, 150, 30);
-        arrivalLabel.setBounds(100, 380, 150, 30);
-        ecopriceLabel.setBounds(100, 450, 150, 30);
-        buspriceLabel.setBounds(100, 520, 150, 30);
-        bookButton.setBounds(100, 590, 100, 30);
+        flightLabel.setBounds(70, 10, 100, 30);
+        FromLabel.setBounds(40, 40, 100, 30);
+        ToLabel.setBounds(140, 40, 100, 30);
+        dateLabel.setBounds(400,10,100,30);
+        departureLabel.setBounds(280, 50, 150, 30);
+        arrivalLabel.setBounds(450, 50, 150, 30);
+        ecopriceLabel.setBounds(680, 30, 150, 30);
+        buspriceLabel.setBounds(950, 30, 150, 30);
+        bookButton.setBounds(1180, 30, 100, 30);
     }
 
     public void addComponents() {
@@ -49,6 +51,7 @@ class Panel_1 extends JPanel implements ActionListener {
         add(ecopriceLabel);
         add(buspriceLabel);
         add(bookButton);
+        add(dateLabel);
     }
 
     public void addActionEvent() {
@@ -102,7 +105,7 @@ public class HomePage extends JFrame implements ActionListener {
         findButton.setBounds(950, 120, 100, 30);
         accountButton.setBounds(1400, 10, 100, 30);
         ticketButton.setBounds(1225, 10, 150, 30);
-        p.setBounds(300, 300, 800, 600); // Adjust position and size of Panel_1
+        p.setBounds(100, 200, 1350, 100); // Adjust position and size of Panel_1
     }
 
     public void addComponentsToContainer() {
