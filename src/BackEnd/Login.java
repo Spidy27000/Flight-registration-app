@@ -14,6 +14,9 @@ class DLogin extends IData {
     this.password = password;
     this.passengerId = passengerId;
   }
+  public DLogin(){
+
+  }
 }
 
 public class Login implements ITable {
@@ -107,15 +110,14 @@ public class Login implements ITable {
     PreparedStatement pstmt = null;
     DLogin data = (DLogin) object;
 
-    String insertQuery = "UPDATE Login SET email = ?, password = ?, passenger_id = ? WHERE id = ?";
+    String insertQuery = "UPDATE Login SET email = ?, password = ? WHERE id = ?";
 
     try {
       pstmt = conn.prepareStatement(insertQuery);
 
       pstmt.setString(1, data.email);
       pstmt.setString(2, data.password);
-      pstmt.setInt(3, data.passengerId);
-      pstmt.setInt(4, id);
+      pstmt.setInt(3, id);
 
       // Executing the insert query
       pstmt.executeUpdate();

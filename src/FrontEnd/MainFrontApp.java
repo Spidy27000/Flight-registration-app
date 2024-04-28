@@ -59,8 +59,13 @@ public class MainFrontApp extends JFrame {
   public void showUpdate(int id){
     cardLayout.show(cardPanel, "update");
     setTitle("Update");
-    updatePage.AddDataTofField(id);
+    updatePage.loginId = id;
+    updatePage.AddDataTofField();
 
+  }
+
+  public void showBooking(int loginId , int flightId){
+    
   }
 
 }

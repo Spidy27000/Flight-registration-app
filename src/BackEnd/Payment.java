@@ -6,13 +6,13 @@ class DPayment extends IData {
   int id;
   int ammount;
   String mode;
-  int passengerId;
+  int loginId;
 
-  DPayment(String mode, int ammount, int passengerId) {
+  DPayment(String mode, int ammount, int loginId) {
     this.id = 0;
     this.mode = mode;
     this.ammount = ammount;
-    this.passengerId = passengerId;
+    this.loginId = loginId;
   }
 }
 
@@ -31,9 +31,9 @@ public class Payment implements ITable {
         "id INT AUTO_INCREMENT PRIMARY KEY," +
         "ammount int NOT NULL," +
         "mode VARCHAR(30) NOT NULL," +
-        "passenger_id int NOT NULL," +
-        "FOREIGN KEY (passenger_id)" +
-        "   REFERENCES Passenger(id)" +
+        "login_id int NOT NULL," +
+        "FOREIGN KEY (login_id)" +
+        "   REFERENCES Login(id)" +
         "   ON DELETE CASCADE" +
         "   ON UPDATE CASCADE);";
 
@@ -63,7 +63,7 @@ public class Payment implements ITable {
     ResultSet rs = null;
     DPayment data = (DPayment) object;
 
-    String insertQuery = "INSERT INTO Payment (ammount,mode,passenger_id) VALUES (?, ?, ?)";
+    String insertQuery = "INSERT INTO Payment (ammount,mode,login_id) VALUES (?, ?, ?)";
     String idQuery = "SELECT LAST_INSERT_ID()";
 
     try {
@@ -71,7 +71,7 @@ public class Payment implements ITable {
       stmt = conn.prepareStatement(idQuery);
       pstmt.setInt(1, data.ammount);
       pstmt.setString(2, data.mode);
-      pstmt.setInt(3, data.passengerId);
+      pstmt.setInt(3, data.loginId);
 
       // Executing the insert query
       int rowsInserted = pstmt.executeUpdate();
@@ -109,14 +109,14 @@ public class Payment implements ITable {
     PreparedStatement pstmt = null;
     DPayment data = (DPayment) object;
 
-    String insertQuery = "UPDATE Payment SET ammount = ?, mode = ?, passenger_id = ? WHERE id = ?";
+    String insertQuery = "UPDATE Payment SET ammount = ?, mode = ?, login_id = ? WHERE id = ?";
 
     try {
       pstmt = conn.prepareStatement(insertQuery);
 
       pstmt.setInt(1, data.ammount);
       pstmt.setString(2, data.mode);
-      pstmt.setInt(3, data.passengerId);
+      pstmt.setInt(3, data.loginId);
       pstmt.setInt(4, id);
 
       // Executing the insert query

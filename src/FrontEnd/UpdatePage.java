@@ -2,13 +2,21 @@ package FrontEnd;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+
+import BackEnd.Db;
 
 public class UpdatePage extends JPanel implements ActionListener {
   private static final long serialVersionUID = 1L;
@@ -35,13 +43,17 @@ public class UpdatePage extends JPanel implements ActionListener {
   JCheckBox showPassword2 = new JCheckBox("Show Password");
   JButton deleteButton = new JButton("DELETE ACCOUNT");
   MainFrontApp app;
+  Db db ;
+  int loginId = 0;
 
   public UpdatePage(MainFrontApp app) {
+    this.db= Db.getInst();
     this.app = app;
     setLayout(null);
     setLocationAndSize();
     addComponentsToContainer();
     addActionEvent();
+
   }
 
   public void setLocationAndSize() {
@@ -80,9 +92,7 @@ public class UpdatePage extends JPanel implements ActionListener {
 
   }
 
-  public void AddDataTofField(int id) {
-
-    
+  public void AddDataTofField() {
 
   }
 
@@ -116,10 +126,101 @@ public class UpdatePage extends JPanel implements ActionListener {
     cancleButton.addActionListener(this);
     showPassword.addActionListener(this);
     showPassword2.addActionListener(this);
+    deleteButton.addActionListener(this);
   }
 
   @Override
   public void actionPerformed(ActionEvent e) {
+    if (e.getSource() == confirmButton) {
+      String emailText = emailTextField.getText();
+      
+
+      if (emailText.length() ==0){
+        JOptionPane.showMessageDialog(this, "Email should not be empty");
+        return;
+      }
+
+      String pwdText;
+      char[] passwordChars = passwordField.getPassword();
+      pwdText = new String(passwordChars);
+      Arrays.fill(passwordChars, ' ');
+      System.out.println(pwdText);
+
+      String confirmPwdText;
+      char[] cpasswordChars = confirmpasswordField.getPassword();
+      confirmPwdText = new String(cpasswordChars);
+      Arrays.fill(cpasswordChars, ' ');
+      System.out.println(confirmPwdText);
+
+      if((!pwdText.equals(confirmPwdText)) || pwdText.equals("")){
+        JOptionPane.showMessageDialog(this, "Password does not match");
+        return;
+      }
+
+      String name = userTextField.getText();
+      if (name.length() ==0){
+        JOptionPane.showMessageDialog(this, "name should not be empty");
+        return;
+      }
+
+      String dobText = dobTextField.getText();
+      java.sql.Date dateOfBirth ;
+      SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+      try {
+        java.util.Date utilDate = dateFormat.parse(dobText);
+        dateOfBirth = new java.sql.Date(utilDate.getTime());
+
+      } catch (ParseException err) {
+        JOptionPane.showMessageDialog(this, "Invalid Date format");
+        return;
+      }
+
+      LocalDate dob = dateOfBirth.toLocalDate();
+      LocalDate currentDate = LocalDate.now();
+      Period period = Period.between(dob, currentDate);
+      int age = period.getYears();
+
+      String address = addTextField.getText();
+      System.out.println(address);
+      if (address.length() ==0){
+        JOptionPane.showMessageDialog(this, "Adddress should not be empty");
+        return;
+      }
+
+      String phoneNoText = phoneTextField.getText();
+      if (phoneNoText.length() ==0){
+        JOptionPane.showMessageDialog(this, "Number should not be empty");
+        return;
+      }
+      if (phoneNoText.length() !=10){
+        JOptionPane.showMessageDialog(this, "Invalid number ");
+        return;
+      }
+      long phoneNo;
+      try {
+        phoneNo = Long.parseLong(phoneNoText);
+      } catch (NumberFormatException err) {
+        JOptionPane.showMessageDialog(this, " the phone no may only contain numeric data");
+        return;
+      }
+
+      String passportNo = passportTextField.getText();
+      if (passportNo.length() ==0){
+        JOptionPane.showMessageDialog(this, "passport Number should not be empty");
+        return;
+      }
+
+      db.UpdateUser(loginId,emailText, pwdText, name, age, dateOfBirth, address, phoneNo, passportNo);   
+      app.showHome(loginId);
+      
+    }
+    if (e.getSource() == deleteButton) {
+      int rs = JOptionPane.showConfirmDialog(null, "Do u want to delete ur account", "Confirmation",JOptionPane.YES_NO_OPTION);
+      if (rs == JOptionPane.YES_OPTION) {
+        this.db.DeleteUser(this.loginId);
+        this.app.showLogin();
+      }
+    }
 
     if (e.getSource() == showPassword) {
       if (showPassword.isSelected()) {

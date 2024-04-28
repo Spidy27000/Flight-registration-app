@@ -7,15 +7,15 @@ class DBooking extends IData {
   int economySeats;
   int bussinessClassSeats;
   int flightId;
-  int passengerId;
+  int loginId;
   int paymentId;
 
-  DBooking(int economySeats, int bussinessClassSeats, int flightId, int passengerId, int paymentId) {
+  DBooking(int economySeats, int bussinessClassSeats, int flightId, int loginId, int paymentId) {
     this.id = 0;
     this.economySeats = economySeats;
     this.bussinessClassSeats = bussinessClassSeats;
     this.flightId = flightId;
-    this.passengerId = passengerId;
+    this.loginId= loginId;
     this.paymentId = paymentId;
   }
 }
@@ -40,9 +40,9 @@ public class Booking implements ITable {
         "   REFERENCES Flight(id)" +
         "   ON DELETE CASCADE" +
         "   ON UPDATE CASCADE," +
-        "passenger_id int NOT NULL," +
-        "FOREIGN KEY (passenger_id)" +
-        "   REFERENCES Passenger(id)" +
+        "login_id int NOT NULL," +
+        "FOREIGN KEY (login_id)" +
+        "   REFERENCES Login(id)" +
         "   ON DELETE CASCADE" +
         "   ON UPDATE CASCADE," +
         "payment_id int NOT NULL," +
@@ -77,7 +77,7 @@ public class Booking implements ITable {
     ResultSet rs = null;
     DBooking data = (DBooking) object;
 
-    String insertQuery = "INSERT INTO Booking (economy_seats,bussness_class_seats,flight_id,passenger_id,payment_id) VALUES (?, ?, ?,?,?)";
+    String insertQuery = "INSERT INTO Booking (economy_seats,bussness_class_seats,flight_id,login_id,payment_id) VALUES (?, ?, ?,?,?)";
     String idQuery = "SELECT LAST_INSERT_ID()";
 
     try {
@@ -86,7 +86,7 @@ public class Booking implements ITable {
       pstmt.setInt(1, data.economySeats);
       pstmt.setInt(2, data.bussinessClassSeats);
       pstmt.setInt(3, data.flightId);
-      pstmt.setInt(4, data.passengerId);
+      pstmt.setInt(4, data.loginId);
       pstmt.setInt(5, data.paymentId);
 
       // Executing the insert query
@@ -125,14 +125,14 @@ public class Booking implements ITable {
     PreparedStatement pstmt = null;
     DBooking data = (DBooking) object;
 
-    String updateQuery = "UPDATE Booking SET economy_seats = ?, bussness_class_seats = ?, flight_id = ?, passenger_id = ?, payment_id = ? WHERE id = ?";
+    String updateQuery = "UPDATE Booking SET economy_seats = ?, bussness_class_seats = ?, flight_id = ?, login_id = ?, payment_id = ? WHERE id = ?";
 
     try {
       pstmt = conn.prepareStatement(updateQuery);
       pstmt.setInt(1, data.economySeats);
       pstmt.setInt(2, data.bussinessClassSeats);
       pstmt.setInt(3, data.flightId);
-      pstmt.setInt(4, data.passengerId);
+      pstmt.setInt(4, data.loginId);
       pstmt.setInt(5, data.paymentId);
       pstmt.setInt(6, id);
 

@@ -55,8 +55,39 @@ public class Db {
     }
   }
 
+  public void DeleteUser(int id) {
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+    String query = "Select passenger_id from login where id = ?";
+    int passengerId = 0;
+    try {
+      pstmt = conn.prepareStatement(query);
+      pstmt.setInt(1, id);
+      rs = pstmt.executeQuery();
+      if (rs.next()) {
+        passengerId = rs.getInt(1);
+      }
+
+    } catch (SQLException e) {
+      e.getStackTrace();
+    } finally {
+      try {
+        if (rs != null) {
+          rs.close();
+        }
+        if (pstmt != null) {
+          pstmt.close();
+        }
+      } catch (SQLException e) {
+        e.getStackTrace();
+      }
+    }
+    tables[Table.LOGIN.val].Delete(id);
+    tables[Table.PASSENGER.val].Delete(passengerId);
+  }
+
   public int insertUser(String email, String password, String name, int age, Date dob, String address, long phoneNo,
-      int passportNo) {
+      String passportNo) {
 
     IData passenger = new DPassenger(name, age, dob, address, phoneNo, passportNo);
     tables[Table.PASSENGER.val].Insert(passenger);
@@ -86,11 +117,11 @@ public class Db {
       e.getStackTrace();
     } finally {
       try {
-        if (pstmt != null) {
-          pstmt.close();
-        }
         if (rs != null) {
           rs.close();
+        }
+        if (pstmt != null) {
+          pstmt.close();
         }
       } catch (SQLException e) {
         e.getStackTrace();
@@ -163,7 +194,7 @@ public class Db {
   }
 
   // to see number of tickets
-  public Map<String, Object>[] getMyTickets(int userId) {
+  public Map<String, Object>[] getMyTickets(int loginId) {
     PreparedStatement pstmt = null;
     ResultSet rs = null;
     @SuppressWarnings("unchecked")
@@ -171,13 +202,13 @@ public class Db {
 
     try {
 
-      String query = "SELECT pl.name, b.economy_seats, b.bussiness_class_seats, f.to_location, f.from_location, f.departure_time, f.arriving_time "
+      String query = "SELECT p.name, b.economy_seats, b.bussiness_class_seats, f.to_location, f.from_location, f.departure_time, f.arriving_time "
           +
-          "FROM Flight f, Passenger p, Booking b, Plane pl " +
-          "WHERE p.id = b.passenger_id AND b.flight_id = f.id AND f.plane_id = pl.id AND p.id = ?";
+          "FROM Flight f, Login l, Booking b, Plane p " +
+          "WHERE l.id = b.login_id AND b.flight_id = f.id AND f.plane_id = p.id AND l.id = ?";
 
       pstmt = conn.prepareStatement(query);
-      pstmt.setInt(1, userId); // Set the user ID parameter
+      pstmt.setInt(1, loginId); // Set the user ID parameter
 
       rs = pstmt.executeQuery();
 
@@ -214,7 +245,42 @@ public class Db {
 
   // for updating info
   public Map<String, Object> getUserInfomation(int id) {
-    Map<String, Object> ret = new HashMap<String, Object>();
+    Map<String, Object> ret = new HashMap<>();
+    PreparedStatement statement = null;
+    ResultSet resultSet = null;
+
+    try {
+      // Establish connection
+      String query = "SELECT l.email, l.password, p.name, p.date_of_birth, p.address, p.phone_no, p.passport_no " +
+          "FROM Login l, Passenger p " +
+          "WHERE l.passenger_id = p.id AND l.id = ?";
+      statement = conn.prepareStatement(query);
+      statement.setInt(1, id);
+
+      resultSet = statement.executeQuery();
+
+      if (resultSet.next()) {
+        // Retrieve user information
+        ret.put("email", resultSet.getString("email"));
+        ret.put("password", resultSet.getString("password"));
+        ret.put("name", resultSet.getString("name"));
+        ret.put("date_of_birth", resultSet.getDate("date_of_birth"));
+        ret.put("address", resultSet.getString("address"));
+        ret.put("phone_no", resultSet.getString("phone_no"));
+        ret.put("passport_no", resultSet.getString("passport_no"));
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (resultSet != null)
+          resultSet.close();
+        if (statement != null)
+          statement.close();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
 
     return ret;
   }
@@ -234,5 +300,52 @@ public class Db {
 
   public int calculateAmount(int flightId, int economySeats, int bussinessClassSeats) {
     return 0;
+  }
+
+  public void UpdateUser(int loginId, String emailText, String pwdText, String name, int age, Date dateOfBirth,
+      String address, long phoneNo, String passportNo) {
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+    String query = "Select passenger_id from login where id = ?";
+    int passengerId = 0;
+    try {
+      pstmt = conn.prepareStatement(query);
+      pstmt.setInt(1, loginId);
+      rs = pstmt.executeQuery();
+      if (rs.next()) {
+        passengerId = rs.getInt(1);
+      }
+      System.out.println(passengerId + "fasfseafgsgsaegsgsegsegwse:w");
+    } catch (SQLException e) {
+      e.getStackTrace();
+    } finally {
+      try {
+        if (rs != null) {
+          rs.close();
+        }
+        if (pstmt != null) {
+          pstmt.close();
+        }
+      } catch (SQLException e) {
+        e.getStackTrace();
+      }
+    }
+    DPassenger pass = new DPassenger();
+    DLogin login = new DLogin();
+    
+    login.id= loginId;
+    login.email = emailText; 
+    login.password = pwdText;
+    login.passengerId = passengerId;
+    pass.id = passengerId;
+    pass.name = name;
+    pass.age = age;
+    pass.dateOfBirth = dateOfBirth;
+    pass.address = address;
+    pass.phoneNo = phoneNo;
+    pass.passportNo = passportNo;
+
+    tables[Table.LOGIN.val].Update(loginId,login);
+    tables[Table.PASSENGER.val].Update(passengerId, pass);
   }
 }

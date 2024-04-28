@@ -9,9 +9,9 @@ class DPassenger extends IData {
   Date dateOfBirth;
   String address;
   long phoneNo;
-  int passportNo;
+  String passportNo;
 
-  DPassenger(String name, int age, Date dateOfBirth, String address, long phoneNo, int passportNo) {
+  DPassenger(String name, int age, Date dateOfBirth, String address, long phoneNo, String passportNo) {
     this.id = 0;
     this.name = name;
     this.age = age;
@@ -19,6 +19,9 @@ class DPassenger extends IData {
     this.address = address;
     this.phoneNo = phoneNo;
     this.passportNo = passportNo;
+  }
+  public DPassenger(){
+
   }
 }
 
@@ -41,7 +44,7 @@ public class Passenger implements ITable {
         "date_of_birth DATE NOT NULL," +
         "address TEXT NOT NULL," +
         "phone_no NUMERIC(10) NOT NULL," +
-        "passport_no INT NOT NULL);";
+        "passport_no varchar(13) NOT NULL);";
 
     try {
       stmt = conn.createStatement();
@@ -82,7 +85,7 @@ public class Passenger implements ITable {
       pstmt.setDate(3, data.dateOfBirth);
       pstmt.setString(4, data.address);
       pstmt.setLong(5, data.phoneNo);
-      pstmt.setInt(6, data.passportNo);
+      pstmt.setString(6, data.passportNo);
 
       // Executing the insert query
       int rowsInserted = pstmt.executeUpdate();
@@ -120,18 +123,18 @@ public class Passenger implements ITable {
     PreparedStatement pstmt = null;
     DPassenger data = (DPassenger) object;
 
-    String insertQuery = "UPDATE Passenger SET name = ?, age = ?, date_of_birth = ?, address = ?, phone_no = ?, passport_no = ? WHERE id = ?";
+    String insertQuery = "UPDATE Passenger SET name = ?, age = ?, date_of_birth = ?, address = ?, phone_no = ?, passport_no = ? WHERE id = ?;";
 
     try {
       pstmt = conn.prepareStatement(insertQuery);
-
+System.out.println("inside update");
       pstmt.setString(1, data.name);
       pstmt.setInt(2, data.age);
       pstmt.setDate(3, data.dateOfBirth);
       pstmt.setString(4, data.address);
       pstmt.setLong(5, data.phoneNo);
-      pstmt.setInt(6, data.passportNo);
-      pstmt.setInt(7, id);
+      pstmt.setString(6, data.passportNo);
+      pstmt.setInt(7, data.id);
 
       // Executing the insert query
       pstmt.executeUpdate();

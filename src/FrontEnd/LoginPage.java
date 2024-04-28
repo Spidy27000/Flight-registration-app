@@ -23,8 +23,6 @@ public class LoginPage extends JPanel implements ActionListener {
   MainFrontApp app;
 
   public LoginPage(MainFrontApp app) {
-    // frame.setBounds(10, 10, 370, 600);
-    // frame.setResizable(false);
     this.app = app;
     setLayout(null);
     setLocationAndSize();

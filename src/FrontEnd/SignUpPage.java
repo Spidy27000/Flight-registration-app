@@ -2,6 +2,10 @@ package FrontEnd;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Arrays;
 
 import javax.swing.JButton;
@@ -11,6 +15,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+
+import BackEnd.Db;
 
 public class SignUpPage extends JPanel implements ActionListener {
   private static final long serialVersionUID = 1L;
@@ -35,9 +41,11 @@ public class SignUpPage extends JPanel implements ActionListener {
   JCheckBox showPassword = new JCheckBox("Show Password");
   JCheckBox showPassword2 = new JCheckBox("Show Password");
   MainFrontApp app;
+  Db db;
 
   public SignUpPage(MainFrontApp app) {
     this.app = app;
+    db = Db.getInst();
     setLayout(null);
     setLocationAndSize();
     addComponentsToContainer();
@@ -110,21 +118,89 @@ public class SignUpPage extends JPanel implements ActionListener {
   @Override
   public void actionPerformed(ActionEvent e) {
     if (e.getSource() == signUpButton) {
-      String emailText;
+      String emailText = emailTextField.getText();
+
+      if (emailText.length() ==0){
+        JOptionPane.showMessageDialog(this, "Email should not be empty");
+        return;
+      }
+
       String pwdText;
-      emailText = emailTextField.getText();
       char[] passwordChars = passwordField.getPassword();
       pwdText = new String(passwordChars);
       Arrays.fill(passwordChars, ' ');
-      if (emailText.equalsIgnoreCase("mehtab") && pwdText.equalsIgnoreCase("12345")) {
-        JOptionPane.showMessageDialog(this, "Login Successful");
-      } else {
-        JOptionPane.showMessageDialog(this, "Invalid Username or Password");
+      System.out.println(pwdText);
+
+      String confirmPwdText;
+      char[] cpasswordChars = confirmpasswordField.getPassword();
+      confirmPwdText = new String(cpasswordChars);
+      Arrays.fill(cpasswordChars, ' ');
+      System.out.println(confirmPwdText);
+
+      if((!pwdText.equals(confirmPwdText)) || pwdText.equals("")){
+        JOptionPane.showMessageDialog(this, "Password does not match");
+        return;
       }
 
+      String name = userTextField.getText();
+      if (name.length() ==0){
+        JOptionPane.showMessageDialog(this, "name should not be empty");
+        return;
+      }
+
+      String dobText = dobTextField.getText();
+      java.sql.Date dateOfBirth ;
+      SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+      try {
+        java.util.Date utilDate = dateFormat.parse(dobText);
+        dateOfBirth = new java.sql.Date(utilDate.getTime());
+
+      } catch (ParseException err) {
+        JOptionPane.showMessageDialog(this, "Invalid Date format");
+        return;
+      }
+
+      LocalDate dob = dateOfBirth.toLocalDate();
+      LocalDate currentDate = LocalDate.now();
+      Period period = Period.between(dob, currentDate);
+      int age = period.getYears();
+
+      String address = addTextField.getText();
+      System.out.println(address);
+      if (address.length() ==0){
+        JOptionPane.showMessageDialog(this, "Adddress should not be empty");
+        return;
+      }
+
+      String phoneNoText = phoneTextField.getText();
+      if (phoneNoText.length() ==0){
+        JOptionPane.showMessageDialog(this, "Number should not be empty");
+        return;
+      }
+      if (phoneNoText.length() !=10){
+        JOptionPane.showMessageDialog(this, "Invalid number ");
+        return;
+      }
+      long phoneNo;
+      try {
+        phoneNo = Long.parseLong(phoneNoText);
+      } catch (NumberFormatException err) {
+        JOptionPane.showMessageDialog(this, " the phone no may only contain numeric data");
+        return;
+      }
+
+      String passportNo = passportTextField.getText();
+      if (passportNo.length() ==0){
+        JOptionPane.showMessageDialog(this, "passport Number should not be empty");
+        return;
+      }
+
+      int id = db.insertUser(emailText, pwdText, name, age, dateOfBirth, address, phoneNo, passportNo);   
+      app.showHome(id);
+      
     }
     if (e.getSource() == loginButton) {
-app.showLogin();
+      app.showLogin();
     }
     if (e.getSource() == showPassword) {
       if (showPassword.isSelected()) {
