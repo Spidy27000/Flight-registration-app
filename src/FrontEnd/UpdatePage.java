@@ -4,11 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 
-public class SignUpPage extends JPanel implements ActionListener {
+
+public class UpdatePage extends JFrame implements ActionListener {
   private static final long serialVersionUID = 1L;
   Container container;
+  JLabel UpdateLabel = new JLabel("Change the details you wish to update and press the update button");  
   JLabel emailLabel = new JLabel("EMAIL:");
   JLabel addLabel = new JLabel("ADDRESS:");
   JLabel dobLabel = new JLabel("DATE OF BIRTH:");
@@ -25,23 +26,29 @@ public class SignUpPage extends JPanel implements ActionListener {
   JTextField passportTextField = new JTextField();
   JPasswordField passwordField = new JPasswordField();
   JPasswordField confirmpasswordField = new JPasswordField();
-  JButton loginButton = new JButton("Login");
-  JButton signUpButton = new JButton("Sign up");
+  JButton confirmButton = new JButton("CONFIRM");
+  JButton cancleButton = new JButton("CANCLE");
   JCheckBox showPassword = new JCheckBox("Show Password");
   JCheckBox showPassword2 = new JCheckBox("Show Password");
   MainFrontApp app;
 
-  public SignUpPage(MainFrontApp app) {
-    this.container = app.getContentPane();
-    this.app = app;
+  public UpdatePage() {
     setLayout(null);
-    setLocationAndSize();
-    addComponentsToContainer();
-    addActionEvent();
-    setVisible(true);
+        setLocationAndSize();
+        addComponentsToContainer();
+        addActionEvent();
+        setTitle("Update Form");
+        setVisible(true);
+        // frame.setBounds(10, 10, 370, 600);
+        setSize(370, 600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // frame.setResizable(false);
   }
 
   public void setLocationAndSize() {
+    
+    UpdateLabel.setBounds(550, 80, 400, 50);
+    
     emailLabel.setBounds(650, 150, 100, 30);
     emailTextField.setBounds(720, 150, 150, 30);
 
@@ -68,60 +75,53 @@ public class SignUpPage extends JPanel implements ActionListener {
     passportLabel.setBounds(620, 640, 140, 30);
     passportTextField.setBounds(720, 640, 150, 30);
 
-    loginButton.setBounds(620, 710, 100, 30);
-    signUpButton.setBounds(770, 710, 100, 30);
+    confirmButton.setBounds(620, 710, 100, 30);
+    cancleButton.setBounds(770, 710, 100, 30);
+
+  }
+
+  public void AddDataToFead() 
+  {
+
+    
 
   }
 
   public void addComponentsToContainer() {
-    add(emailLabel); 
+    add(emailLabel);
     add(userLabel);
     add(addLabel);
     add(passwordLabel);
     add(confirmpasswordLabel);
+    add(confirmpasswordField); 
     add(emailTextField);
     add(addTextField);
     add(userTextField);
     add(passwordField);
-    add(confirmpasswordField);
+    add(confirmButton);
     add(showPassword);
     add(showPassword2);
-    add(loginButton);
-    add(signUpButton);
+    add(cancleButton);
     add(phoneLabel);
     add(phoneTextField);
     add(dobLabel);
     add(dobTextField);
     add(passportLabel);
     add(passportTextField);
+    add(UpdateLabel);
   }
 
   public void addActionEvent() {
-    loginButton.addActionListener(this);
-    signUpButton.addActionListener(this);
+    confirmButton.addActionListener(this);
+    cancleButton.addActionListener(this);
     showPassword.addActionListener(this);
     showPassword2.addActionListener(this);
   }
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    if (e.getSource() == signUpButton) {
-      String emailText;
-      String pwdText;
-      emailText = emailTextField.getText();
-      char[] passwordChars = passwordField.getPassword();
-      pwdText = new String(passwordChars);
-      Arrays.fill(passwordChars, ' ');
-      if (emailText.equalsIgnoreCase("mehtab") && pwdText.equalsIgnoreCase("12345")) {
-        JOptionPane.showMessageDialog(this, "Login Successful");
-      } else {
-        JOptionPane.showMessageDialog(this, "Invalid Username or Password");
-      }
-
-    }
-    if (e.getSource() == loginButton) {
-app.showLogin();
-    }
+    
+    
     if (e.getSource() == showPassword) {
       if (showPassword.isSelected()) {
         passwordField.setEchoChar((char) 0);
