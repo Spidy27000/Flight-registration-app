@@ -31,9 +31,7 @@ public class LoginPage extends JPanel implements ActionListener {
     addActionEvent();
     addComponentsToContainer();
     setVisible(true);
-    JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-    frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-    frame.setVisible(true);
+  
   }
 
   public void setLocationAndSize() {
@@ -72,8 +70,10 @@ public class LoginPage extends JPanel implements ActionListener {
       char[] passwordChars = passwordField.getPassword();
       pwdText = new String(passwordChars);
       Arrays.fill(passwordChars, ' ');
-      if (this.db.doesUserExist(userText, pwdText)) {
+      int id = this.db.doesUserExist(userText, pwdText);
+      if (id != 0) {
         JOptionPane.showMessageDialog(this, "Login Successful");
+        app.showHome(id);
       } else {
         JOptionPane.showMessageDialog(this, "Invalid Username or Password");
       }

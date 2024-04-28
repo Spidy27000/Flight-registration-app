@@ -1,10 +1,13 @@
 package FrontEnd;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 public class BookingPage extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -66,7 +69,6 @@ public class BookingPage extends JFrame implements ActionListener {
     public void addActionEvent() {
         bookButton.addActionListener(this);
         checkButton.addActionListener(this);
-
     }
 
     @Override

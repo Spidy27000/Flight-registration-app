@@ -1,14 +1,19 @@
 package FrontEnd;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
 public class SignUpPage extends JPanel implements ActionListener {
   private static final long serialVersionUID = 1L;
-  Container container;
   JLabel emailLabel = new JLabel("EMAIL:");
   JLabel addLabel = new JLabel("ADDRESS:");
   JLabel dobLabel = new JLabel("DATE OF BIRTH:");
@@ -32,7 +37,6 @@ public class SignUpPage extends JPanel implements ActionListener {
   MainFrontApp app;
 
   public SignUpPage(MainFrontApp app) {
-    this.container = app.getContentPane();
     this.app = app;
     setLayout(null);
     setLocationAndSize();
@@ -93,7 +97,7 @@ public class SignUpPage extends JPanel implements ActionListener {
     add(dobLabel);
     add(dobTextField);
     add(passportLabel);
-    add(passportTextField);
+    add(passportTextField);  
   }
 
   public void addActionEvent() {
@@ -131,10 +135,10 @@ app.showLogin();
 
     }
     if (e.getSource() == showPassword2) {
-      if (showPassword.isSelected()) {
-        passwordField.setEchoChar((char) 0);
+      if (showPassword2.isSelected()) {
+        confirmpasswordField.setEchoChar((char) 0);
       } else {
-        passwordField.setEchoChar('*');
+        confirmpasswordField.setEchoChar('*');
       }
     }
 

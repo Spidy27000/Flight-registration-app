@@ -6,21 +6,23 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map;
 
-class Panel_1 extends JPanel implements ActionListener {
+class PlanePanal extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
 
     JLabel flightLabel = new JLabel("Flight name:");
-    JLabel FromLabel = new JLabel("FROM:");
-    JLabel ToLabel = new JLabel("TO:");
+    JLabel fromLabel = new JLabel("FROM:");
+    JLabel toLabel = new JLabel("TO:");
     JLabel departureLabel = new JLabel("DEPARTURE TIME:");
     JLabel arrivalLabel = new JLabel("ARRIVAL TIME:");
     JLabel ecopriceLabel = new JLabel("ECONOMY PRICE:");
     JLabel buspriceLabel = new JLabel("BUSINESS PRICE:");
     JButton bookButton = new JButton("BOOK");
     JLabel dateLabel = new JLabel("DATE:");
+    int flightId;
 
-    public Panel_1() {
+    public PlanePanal(int id) {
         Border border = BorderFactory.createLineBorder(Color.BLACK, 2);
         setBorder(border);
         setLayout(null);
@@ -29,11 +31,14 @@ class Panel_1 extends JPanel implements ActionListener {
         addActionEvent();
         setVisible(true); // Ensure the panel is visible
     }
+    public void FillData(Map<String,Object> data){
+
+    }
 
     public void setLocationAndSize() {
         flightLabel.setBounds(70, 10, 100, 30);
-        FromLabel.setBounds(40, 40, 100, 30);
-        ToLabel.setBounds(140, 40, 100, 30);
+        fromLabel.setBounds(40, 40, 100, 30);
+        toLabel.setBounds(140, 40, 100, 30);
         dateLabel.setBounds(400,10,100,30);
         departureLabel.setBounds(280, 50, 150, 30);
         arrivalLabel.setBounds(450, 50, 150, 30);
@@ -44,8 +49,8 @@ class Panel_1 extends JPanel implements ActionListener {
 
     public void addComponents() {
         add(flightLabel);
-        add(FromLabel);
-        add(ToLabel);
+        add(fromLabel);
+        add(toLabel);
         add(departureLabel);
         add(arrivalLabel);
         add(ecopriceLabel);
@@ -66,10 +71,9 @@ class Panel_1 extends JPanel implements ActionListener {
 }
 
 
-public class HomePage extends JFrame implements ActionListener {
+public class HomePage extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
 
-    Container container = getContentPane();
     JLabel toLabel = new JLabel("TO:");
     JTextField toTextField = new JTextField();
     JLabel fromLabel = new JLabel("FROM:");
@@ -77,22 +81,17 @@ public class HomePage extends JFrame implements ActionListener {
     JButton findButton = new JButton("FIND");
     JButton accountButton = new JButton("ACCOUNT");
     JButton ticketButton = new JButton("TICKET BOOKED");
+    MainFrontApp app;
+    int id;
 
-    Panel_1 p = new Panel_1();
+    PlanePanal p = new PlanePanal(1);
 
-    public HomePage() {
-        setLayoutManager();
+    public HomePage(MainFrontApp app) {
+        this.app = app;
+        setLayout(null);
         setLocationAndSize();
         addComponentsToContainer();
         addActionEvent();
-        setTitle("Home page");
-        setVisible(true);
-        setSize(1500, 700); // Adjust the size as needed
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
-
-    public void setLayoutManager() {
-        container.setLayout(null);
     }
 
     public void setLocationAndSize() {
@@ -109,14 +108,14 @@ public class HomePage extends JFrame implements ActionListener {
     }
 
     public void addComponentsToContainer() {
-        container.add(toLabel);
-        container.add(toTextField);
-        container.add(fromLabel);
-        container.add(fromTextField);
-        container.add(findButton);
-        container.add(accountButton);
-        container.add(p);
-        container.add(ticketButton);
+        add(toLabel);
+        add(toTextField);
+        add(fromLabel);
+        add(fromTextField);
+        add(findButton);
+        add(accountButton);
+        add(p);
+        add(ticketButton);
     }
 
     public void addActionEvent() {
@@ -127,6 +126,9 @@ public class HomePage extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == accountButton){
+            app.showUpdate(this.id);
+        }
 
     }
 }

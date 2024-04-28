@@ -92,7 +92,6 @@ public class Passenger implements ITable {
         rs = stmt.executeQuery();
         if (rs.next()) {
           object.id = rs.getInt(1);
-          System.out.println("New row inserted with ID: " + object.id);
         }
       }
     } catch (SQLException e) {
@@ -135,7 +134,7 @@ public class Passenger implements ITable {
       pstmt.setInt(7, id);
 
       // Executing the insert query
-      final int rowsInserted = pstmt.executeUpdate();
+      pstmt.executeUpdate();
     
        }
 
@@ -168,7 +167,7 @@ public class Passenger implements ITable {
       e.printStackTrace();
     } finally {
 
-    if (stmt == null){
+    if (stmt != null){
       try{
         stmt.close();
         } catch (SQLException e) { 

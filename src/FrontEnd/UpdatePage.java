@@ -1,15 +1,18 @@
 package FrontEnd;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
-public class UpdatePage extends JFrame implements ActionListener {
+public class UpdatePage extends JPanel implements ActionListener {
   private static final long serialVersionUID = 1L;
-  Container container;
-  JLabel UpdateLabel = new JLabel("Change the details you wish to update and press the update button");  
+  JLabel UpdateLabel = new JLabel("Change the details you wish to update and press the update button");
   JLabel emailLabel = new JLabel("EMAIL:");
   JLabel addLabel = new JLabel("ADDRESS:");
   JLabel dobLabel = new JLabel("DATE OF BIRTH:");
@@ -27,28 +30,23 @@ public class UpdatePage extends JFrame implements ActionListener {
   JPasswordField passwordField = new JPasswordField();
   JPasswordField confirmpasswordField = new JPasswordField();
   JButton confirmButton = new JButton("CONFIRM");
-  JButton cancleButton = new JButton("CANCLE");
+  JButton cancleButton = new JButton("CANCEL");
   JCheckBox showPassword = new JCheckBox("Show Password");
   JCheckBox showPassword2 = new JCheckBox("Show Password");
   MainFrontApp app;
 
-  public UpdatePage() {
+  public UpdatePage(MainFrontApp app) {
+    this.app = app;
     setLayout(null);
-        setLocationAndSize();
-        addComponentsToContainer();
-        addActionEvent();
-        setTitle("Update Form");
-        setVisible(true);
-        // frame.setBounds(10, 10, 370, 600);
-        setSize(370, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // frame.setResizable(false);
+    setLocationAndSize();
+    addComponentsToContainer();
+    addActionEvent();
   }
 
   public void setLocationAndSize() {
-    
+
     UpdateLabel.setBounds(550, 80, 400, 50);
-    
+
     emailLabel.setBounds(650, 150, 100, 30);
     emailTextField.setBounds(720, 150, 150, 30);
 
@@ -80,10 +78,7 @@ public class UpdatePage extends JFrame implements ActionListener {
 
   }
 
-  public void AddDataToFead() 
-  {
-
-    
+  public void AddDataTofField(int id) {
 
   }
 
@@ -93,7 +88,7 @@ public class UpdatePage extends JFrame implements ActionListener {
     add(addLabel);
     add(passwordLabel);
     add(confirmpasswordLabel);
-    add(confirmpasswordField); 
+    add(confirmpasswordField);
     add(emailTextField);
     add(addTextField);
     add(userTextField);
@@ -120,8 +115,7 @@ public class UpdatePage extends JFrame implements ActionListener {
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    
-    
+
     if (e.getSource() == showPassword) {
       if (showPassword.isSelected()) {
         passwordField.setEchoChar((char) 0);
@@ -131,10 +125,10 @@ public class UpdatePage extends JFrame implements ActionListener {
 
     }
     if (e.getSource() == showPassword2) {
-      if (showPassword.isSelected()) {
-        passwordField.setEchoChar((char) 0);
+      if (showPassword2.isSelected()) {
+        confirmpasswordField.setEchoChar((char) 0);
       } else {
-        passwordField.setEchoChar('*');
+        confirmpasswordField.setEchoChar('*');
       }
     }
 

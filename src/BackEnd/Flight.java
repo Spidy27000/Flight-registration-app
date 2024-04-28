@@ -105,8 +105,7 @@ public class Flight implements ITable {
         // If the insertion was successful, retrieving the ID of the newly inserted row
         rs = stmt.executeQuery();
         if (rs.next()) {
-          data.id = rs.getInt(1);
-          System.out.println("New row inserted with ID: " + data.id);
+          object.id = rs.getInt(1);
         }
       }
     } catch (SQLException e) {
@@ -152,7 +151,7 @@ public class Flight implements ITable {
       pstmt.setInt(10,id);
 
       // Executing the insert query
-      int rowsInserted = pstmt.executeUpdate();
+      pstmt.executeUpdate();
 
     } catch (SQLException e) {
       e.printStackTrace();
@@ -183,7 +182,7 @@ public class Flight implements ITable {
       e.printStackTrace();
     } finally {
 
-    if (stmt == null){
+    if (stmt != null){
       try{
         stmt.close();
         } catch (SQLException e) { 
