@@ -33,6 +33,7 @@ public class UpdatePage extends JPanel implements ActionListener {
   JButton cancleButton = new JButton("CANCEL");
   JCheckBox showPassword = new JCheckBox("Show Password");
   JCheckBox showPassword2 = new JCheckBox("Show Password");
+  JButton deleteButton = new JButton("DELETE ACCOUNT");
   MainFrontApp app;
 
   public UpdatePage(MainFrontApp app) {
@@ -73,12 +74,15 @@ public class UpdatePage extends JPanel implements ActionListener {
     passportLabel.setBounds(620, 640, 140, 30);
     passportTextField.setBounds(720, 640, 150, 30);
 
-    confirmButton.setBounds(620, 710, 100, 30);
-    cancleButton.setBounds(770, 710, 100, 30);
+    confirmButton.setBounds(570, 710, 100, 30);
+    cancleButton.setBounds(720, 710, 100, 30);
+    deleteButton.setBounds(880, 710, 180, 30);
 
   }
 
   public void AddDataTofField(int id) {
+
+    
 
   }
 
@@ -104,6 +108,7 @@ public class UpdatePage extends JPanel implements ActionListener {
     add(passportLabel);
     add(passportTextField);
     add(UpdateLabel);
+    add(deleteButton);
   }
 
   public void addActionEvent() {
