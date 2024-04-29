@@ -1,3 +1,6 @@
+package FrontEnd;
+
+
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,7 +15,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-public class PaymentPage extends JFrame implements ActionListener {
+public class PaymentPage extends JPanel implements ActionListener {
   private static final long serialVersionUID = 1L;
   JLabel pleaseLabel = new JLabel("Please select your prefered payment method ");
   
@@ -36,13 +39,13 @@ public class PaymentPage extends JFrame implements ActionListener {
   }
 
   public void setLocationAndSize() {
-    pleaseLabel.setBounds(650, 150, 100, 30);
-    upiButton.setBounds(720, 150, 150, 30);
+    pleaseLabel.setBounds(650, 190, 500, 30);
+    upiButton.setBounds(720, 260, 150, 30);
 
-    netbankingButton.setBounds(620, 220, 100, 30);
-    cardsButton.setBounds(720, 220, 150, 30);
+    netbankingButton.setBounds(720, 330, 150, 30);
+    cardsButton.setBounds(720, 400, 150, 30);
     
-    paymentButton.setBounds(620, 290, 100, 30);
+    paymentButton.setBounds(690, 470, 150, 30);
   }
 
   public void addComponentsToContainer() {
@@ -68,7 +71,4 @@ public class PaymentPage extends JFrame implements ActionListener {
   @Override
   public void actionPerformed(ActionEvent e) {
   }
-  public static void main(String[] args) {
-    new PaymentPage();
-  }
-}
+} 
