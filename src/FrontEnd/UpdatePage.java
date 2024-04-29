@@ -7,6 +7,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -93,6 +95,16 @@ public class UpdatePage extends JPanel implements ActionListener {
   }
 
   public void AddDataTofField() {
+    Map<String, String> data = new HashMap<String,String>();
+    data = db.getUserInfomation(this.loginId);
+    emailTextField.setText(data.get("email"));
+    passwordField .setText(data.get("password"));
+    confirmpasswordField.setText(data.get("password")); 
+    userTextField.setText(data.get("name"));
+    dobTextField.setText(data.get("date_of_birth"));
+    addTextField.setText(data.get("address"));
+    phoneTextField.setText(data.get("phone_no"));
+    passportTextField.setText(data.get("passport_no"));
 
   }
 

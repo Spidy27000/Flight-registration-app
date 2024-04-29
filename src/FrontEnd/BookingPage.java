@@ -15,11 +15,12 @@ public class BookingPage extends JFrame implements ActionListener {
     JLabel needLabel = new JLabel("Please enter how many tickets are needed");
     JLabel ecoLabel = new JLabel("ECONOMY Class:");
     JLabel bussLabel = new JLabel("BUSINESS CLASS:");
+    JLabel priceLabel = new JLabel("PRICE = ");
 
     JTextField ecoTextField = new JTextField();
     JTextField bussTextField = new JTextField();
 
-    JButton checkButton = new JButton("CHECK PRIZE");
+    JButton checkButton = new JButton("CHECK PRICE");
     JButton bookButton = new JButton("BOOK");
 
     MainFrontApp app;
@@ -47,8 +48,10 @@ public class BookingPage extends JFrame implements ActionListener {
         bussLabel.setBounds(650, 360, 200, 30);
         bussTextField.setBounds(780, 360, 150, 30);
 
-        checkButton.setBounds(710, 430, 150, 30);
-        bookButton.setBounds(710, 500, 150, 30);
+        priceLabel.setBounds(650, 430, 200, 30);
+
+        checkButton.setBounds(710, 500, 150, 30);
+        bookButton.setBounds(710, 570, 150, 30);
 
     }
 
@@ -63,6 +66,7 @@ public class BookingPage extends JFrame implements ActionListener {
         add(bussLabel);
         add(bussTextField);
         add(checkButton);
+        add(priceLabel);
         add(bookButton);
     }
 

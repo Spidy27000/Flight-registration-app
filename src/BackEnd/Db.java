@@ -134,17 +134,16 @@ public class Db {
    * @param from
    * @param to
    * @return
-   *         format name,to,from,departure,arival,avalable economy seats, avalable
-   *         bussiness class seats ,economy prize,bussness class price
+   *         format name,to,from,departure,arival,economy prize,bussness class price
    */
-  public Map<String, Object>[] getAvailableFlights(String from, String to) {
+  public Map<String, String>[] getAvailableFlights(String from, String to) {
     PreparedStatement pstmt = null;
     ResultSet rs = null;
     @SuppressWarnings("unchecked")
-    Map<String, Object>[] ret = new HashMap[10]; // Initialize the array to store flight details
+    Map<String, String>[] ret = new HashMap[10]; // Initialize the array to store flight details
 
     try {
-      String query = "SELECT p.name, f.to_location, f.from_location, f.departure_time, f.arriving_time, f.economy_seats, f.bussiness_class_seats, f.economy_prize, f.bussiness_class_prize "
+      String query = "SELECT f.id p.name, f.to_location, f.from_location, f.departure_time, f.arriving_time, f.economy_prize, f.bussiness_class_prize "
           + "FROM Flight f, Plane p "
           + "WHERE f.plane_id = p.id AND f.from_location = ? AND f.to_location = ?";
 
@@ -156,16 +155,18 @@ public class Db {
 
       int index = 0;
       while (rs.next()) {
-        Map<String, Object> flightDetails = new HashMap<>();
+        Map<String, String> flightDetails = new HashMap<>();
         flightDetails.put("FlightName", rs.getString("name"));
         flightDetails.put("FromLocation", rs.getString("from_location"));
         flightDetails.put("ToLocation", rs.getString("to_location"));
-        flightDetails.put("DepartureTime", rs.getTimestamp("departure_time"));
-        flightDetails.put("ArrivalTime", rs.getTimestamp("arriving_time"));
-        flightDetails.put("EconomySeats", rs.getInt("economy_seats"));
-        flightDetails.put("BusinessClassSeats", rs.getInt("bussiness_class_seats"));
-        flightDetails.put("EconomyPrice", rs.getInt("economy_prize"));
-        flightDetails.put("BusinessClassPrice", rs.getInt("bussiness_class_prize"));
+        Timestamp departureTime= rs.getTimestamp("departure_time");
+        flightDetails.put("DepartureTime", departureTime.toString());
+        flightDetails.put("ArrivalTime", rs.getTimestamp("arriving_time").toString());
+        flightDetails.put("EconomyPrice", Integer.toString(rs.getInt("economy_prize")));
+        flightDetails.put("BusinessClassPrice", Integer.toString(rs.getInt("bussiness_class_prize")));
+        flightDetails.put("FlightId", Integer.toString(rs.getInt("id")));
+        Date date = new Date(departureTime.getTime());
+        flightDetails.put("Date", date.toString());
 
         ret[index++] = flightDetails;
         if (index >= 10)
@@ -244,8 +245,8 @@ public class Db {
   }
 
   // for updating info
-  public Map<String, Object> getUserInfomation(int id) {
-    Map<String, Object> ret = new HashMap<>();
+  public Map<String, String> getUserInfomation(int id) {
+    Map<String, String> ret = new HashMap<>();
     PreparedStatement statement = null;
     ResultSet resultSet = null;
 
@@ -264,7 +265,7 @@ public class Db {
         ret.put("email", resultSet.getString("email"));
         ret.put("password", resultSet.getString("password"));
         ret.put("name", resultSet.getString("name"));
-        ret.put("date_of_birth", resultSet.getDate("date_of_birth"));
+        ret.put("date_of_birth",resultSet.getDate("date_of_birth").toString());
         ret.put("address", resultSet.getString("address"));
         ret.put("phone_no", resultSet.getString("phone_no"));
         ret.put("passport_no", resultSet.getString("passport_no"));

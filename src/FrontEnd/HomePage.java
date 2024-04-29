@@ -20,9 +20,10 @@ class PlanePanal extends JPanel implements ActionListener {
     JLabel buspriceLabel = new JLabel("BUSINESS PRICE:");
     JButton bookButton = new JButton("BOOK");
     JLabel dateLabel = new JLabel("DATE:");
+   
     int flightId;
 
-    public PlanePanal(int id) {
+    public PlanePanal(int id, int flightId) {
         Border border = BorderFactory.createLineBorder(Color.BLACK, 2);
         setBorder(border);
         setLayout(null);
@@ -30,9 +31,17 @@ class PlanePanal extends JPanel implements ActionListener {
         addComponents();
         addActionEvent();
         setVisible(true); // Ensure the panel is visible
+        setBounds((150 *id) + 100, 200, 1350, 100); // Adjust position and size of Panel_1
     }
-    public void FillData(Map<String,Object> data){
-
+    public void FillData(Map<String, String> data){
+        flightLabel.setText("Name: "+data.get("FlightName"));
+        fromLabel.setText("From: "+data.get("FromLocation"));
+        toLabel.setText("To: "+ data.get("ToLocation"));
+        departureLabel.setText("Departure: "+ data.get("DepartureTime"));
+        arrivalLabel.setText("Arrival: "+data.get("ArrivalTime"));
+        ecopriceLabel.setText("Economey Price: "+data.get("EconomyPrice"));
+        buspriceLabel.setText("Bussness Price: "+data.get("Buss"));
+        dateLabel.setText("Date: "+data.get("Date"));
     }
 
     public void setLocationAndSize() {
@@ -65,7 +74,8 @@ class PlanePanal extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        if (e.getSource() == bookButton){
+        }
     }
 
 }
@@ -84,14 +94,13 @@ public class HomePage extends JPanel implements ActionListener {
     MainFrontApp app;
     int id;
 
-    PlanePanal p = new PlanePanal(1);
-
     public HomePage(MainFrontApp app) {
         this.app = app;
         setLayout(null);
         setLocationAndSize();
         addComponentsToContainer();
         addActionEvent();
+        setBounds(100, 200, 1350, 100); // Adjust position and size of Panel_1
     }
 
     public void setLocationAndSize() {
@@ -104,7 +113,6 @@ public class HomePage extends JPanel implements ActionListener {
         findButton.setBounds(950, 120, 100, 30);
         accountButton.setBounds(1400, 10, 100, 30);
         ticketButton.setBounds(1225, 10, 150, 30);
-        p.setBounds(100, 200, 1350, 100); // Adjust position and size of Panel_1
     }
 
     public void addComponentsToContainer() {
@@ -114,7 +122,6 @@ public class HomePage extends JPanel implements ActionListener {
         add(fromTextField);
         add(findButton);
         add(accountButton);
-        add(p);
         add(ticketButton);
     }
 
