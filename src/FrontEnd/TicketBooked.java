@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
 
-class PlanePanal extends JPanel implements ActionListener {
+class Plane1Panal extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
 
     JLabel flightLabel = new JLabel("Flight name:");
@@ -23,7 +23,7 @@ class PlanePanal extends JPanel implements ActionListener {
    
     int flightId;
 
-    public PlanePanal(int id, int flightId) {
+    public Plane1Panal(int id, int flightId) {
         Border border = BorderFactory.createLineBorder(Color.BLACK, 2);
         setBorder(border);
         setLayout(null);
