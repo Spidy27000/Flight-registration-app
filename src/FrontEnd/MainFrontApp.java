@@ -18,7 +18,6 @@ public class MainFrontApp extends JFrame {
 
     setTitle("Login Form");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setSize(370, 600);
     this.loginPage = new LoginPage(this);
     this.signUpPage = new SignUpPage(this);
     this.homePage = new HomePage(this);

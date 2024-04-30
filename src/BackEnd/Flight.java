@@ -46,8 +46,8 @@ public class Flight implements ITable {
         "bussiness_class_seats SMALLINT NOT NULL," +
         "to_location VARCHAR(30) NOT NULL," +
         "from_location VARCHAR(30) NOT NULL," +
-        "economy_prize INT NOT NULL," +
-        "bussiness_class_prize INT NOT NULL," +
+        "economy_price INT NOT NULL," +
+        "bussiness_class_price INT NOT NULL," +
         "departure_time DATETIME NOT NULL," +
         "arriving_time DATETIME NOT NULL," +
         "plane_id int NOT NULL," +
@@ -82,7 +82,7 @@ public class Flight implements ITable {
     ResultSet rs = null;
     DFlight data = (DFlight) object;
 
-    String insertQuery = "INSERT INTO Flight (economy_seats,bussness_class_seats,to_location,from_loaction,economy_prize,bussness_class_prize,departure_time,arriving_time,plane_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    String insertQuery = "INSERT INTO Flight (economy_seats,bussness_class_seats,to_location,from_loaction,economy_price,bussness_class_price,departure_time,arriving_time,plane_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     String idQuery = "SELECT LAST_INSERT_ID()";
 
     try {
@@ -134,7 +134,7 @@ public class Flight implements ITable {
     PreparedStatement pstmt = null;
     DFlight data = (DFlight) object;
 
-    String updateQuery = "UPDATE Flight SET economy_seats = ?, bussness_class_seats = ?, to_location = ?, from_loaction = ?, economy_prize = ?, bussness_class_prize = ?, departure_time = ?, arriving_time = ?, plane_id = ? WHERE id = ?";
+    String updateQuery = "UPDATE Flight SET economy_seats = ?, bussness_class_seats = ?, to_location = ?, from_loaction = ?, economy_price = ?, bussness_class_price = ?, departure_time = ?, arriving_time = ?, plane_id = ? WHERE id = ?";
 
     try {
       pstmt = conn.prepareStatement(updateQuery);

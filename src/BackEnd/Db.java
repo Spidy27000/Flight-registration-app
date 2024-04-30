@@ -134,7 +134,7 @@ public class Db {
    * @param from
    * @param to
    * @return
-   *         format name,to,from,departure,arival,economy prize,bussness class price
+   *         format name,to,from,departure,arival,economy price,bussness class price
    */
   public Map<String, String>[] getAvailableFlights(String from, String to) {
     PreparedStatement pstmt = null;
@@ -143,7 +143,7 @@ public class Db {
     Map<String, String>[] ret = new HashMap[10]; // Initialize the array to store flight details
 
     try {
-      String query = "SELECT f.id p.name, f.to_location, f.from_location, f.departure_time, f.arriving_time, f.economy_prize, f.bussiness_class_prize "
+      String query = "SELECT f.id p.name, f.to_location, f.from_location, f.departure_time, f.arriving_time, f.economy_price, f.bussiness_class_price "
           + "FROM Flight f, Plane p "
           + "WHERE f.plane_id = p.id AND f.from_location = ? AND f.to_location = ?";
 
@@ -162,8 +162,8 @@ public class Db {
         Timestamp departureTime= rs.getTimestamp("departure_time");
         flightDetails.put("DepartureTime", departureTime.toString());
         flightDetails.put("ArrivalTime", rs.getTimestamp("arriving_time").toString());
-        flightDetails.put("EconomyPrice", Integer.toString(rs.getInt("economy_prize")));
-        flightDetails.put("BusinessClassPrice", Integer.toString(rs.getInt("bussiness_class_prize")));
+        flightDetails.put("EconomyPrice", Integer.toString(rs.getInt("economy_price")));
+        flightDetails.put("BusinessClassPrice", Integer.toString(rs.getInt("bussiness_class_price")));
         flightDetails.put("FlightId", Integer.toString(rs.getInt("id")));
         Date date = new Date(departureTime.getTime());
         flightDetails.put("Date", date.toString());
@@ -204,8 +204,7 @@ public class Db {
     try {
 
       String query = "SELECT p.name, b.economy_seats, b.bussiness_class_seats, f.to_location, f.from_location, f.departure_time, f.arriving_time "
-          +
-          "FROM Flight f, Login l, Booking b, Plane p " +
+          +"FROM Flight f, Login l, Booking b, Plane p " +
           "WHERE l.id = b.login_id AND b.flight_id = f.id AND f.plane_id = p.id AND l.id = ?";
 
       pstmt = conn.prepareStatement(query);
@@ -286,21 +285,66 @@ public class Db {
     return ret;
   }
 
-  public void doPayment(int userId, String mode, int ammont) {
-
+  public int doPayment(int userId, String mode, int ammont) {
+    DPayment data = new DPayment(mode, ammont, userId);
+    tables[Table.PAYMENT.val].Insert(data);
+    return data.id;
+  
   }
 
-  public int bookTicket(int userId, int economySeats, int bussinessClassSeats, int flightId) {
+  public int bookTicket(int userId, int economySeats, int bussinessClassSeats, int flightId,String Mode) {
+    int ammont = calculateAmount(flightId, economySeats, bussinessClassSeats); 
+    int paymentId = doPayment(userId, Mode, ammont); 
 
-    return 0;
+    DBooking booking = new DBooking(economySeats, bussinessClassSeats, flightId, userId, paymentId);
+    tables[Table.BOOKING.val].Insert(booking);  
+    return booking.id;
   }
 
-  public void cancelTicket(int bookingId) {
+  public int cancelTicket(int bookingId) {
+    int ammont;
+    PreparedStatement;
+    String query = "select p.ammount from Payment p, Booking b where b.payment_id = p.id and b.id = ?";
+
+    
+
 
   }
 
   public int calculateAmount(int flightId, int economySeats, int bussinessClassSeats) {
-    return 0;
+    int economyPrice,bussinessClassPrice;
+    PreparedStatement pstmt=null;
+    ResultSet rs = null;
+    String query = "Select economy_price, bussiness_class_price from Flight where id = ?" ;
+    try{
+      pstmt = conn.prepareStatement(query);
+
+      pstmt.setInt(1, flightId);
+      rs = pstmt.executeQuery();
+
+      if (rs.next()){
+        economyPrice = rs.getInt(1);
+        bussinessClassPrice=rs.getInt(2);
+      }
+    }catch (SQLException e){
+      e.printStackTrace();
+    }finally{
+      try{
+        if (rs != null){
+          rs.close(); 
+        }
+        if (pstmt != null){
+          pstmt.close();
+        }
+
+      }catch(SQLException e){
+        e.printStackTrace();
+      }
+      economyPrice = 0;
+      bussinessClassPrice=0;
+    }
+
+    return economyPrice*economySeats + bussinessClassPrice*bussinessClassSeats;
   }
 
   public void UpdateUser(int loginId, String emailText, String pwdText, String name, int age, Date dateOfBirth,

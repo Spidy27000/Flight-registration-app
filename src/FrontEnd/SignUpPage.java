@@ -156,7 +156,7 @@ public class SignUpPage extends JPanel implements ActionListener {
         dateOfBirth = new java.sql.Date(utilDate.getTime());
 
       } catch (ParseException err) {
-        JOptionPane.showMessageDialog(this, "Invalid Date format");
+        JOptionPane.showMessageDialog(this, "Invalid Date format Correct fromat is yyyy-mm-dd");
         return;
       }
 
