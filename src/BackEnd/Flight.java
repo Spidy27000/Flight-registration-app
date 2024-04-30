@@ -48,8 +48,8 @@ public class Flight implements ITable {
         "from_location VARCHAR(30) NOT NULL," +
         "economy_price INT NOT NULL," +
         "bussiness_class_price INT NOT NULL," +
-        "departure_time DATETIME NOT NULL," +
-        "arriving_time DATETIME NOT NULL," +
+        "departure_time TIMESTAMP NOT NULL," +
+        "arriving_time TIMESTAMP NOT NULL," +
         "plane_id int NOT NULL," +
         "FOREIGN KEY (plane_id)" +
         "   REFERENCES Plane(id)" +
@@ -82,7 +82,7 @@ public class Flight implements ITable {
     ResultSet rs = null;
     DFlight data = (DFlight) object;
 
-    String insertQuery = "INSERT INTO Flight (economy_seats,bussness_class_seats,to_location,from_loaction,economy_price,bussness_class_price,departure_time,arriving_time,plane_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    String insertQuery = "INSERT INTO Flight (economy_seats,bussiness_class_seats,to_location,from_location,economy_price,bussiness_class_price,departure_time,arriving_time,plane_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     String idQuery = "SELECT LAST_INSERT_ID()";
 
     try {
