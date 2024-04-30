@@ -34,7 +34,6 @@ public class Payment implements ITable {
         "login_id int NOT NULL," +
         "FOREIGN KEY (login_id)" +
         "   REFERENCES Login(id)" +
-        "   ON DELETE CASCADE" +
         "   ON UPDATE CASCADE);";
 
     try {

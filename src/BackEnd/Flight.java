@@ -53,7 +53,6 @@ public class Flight implements ITable {
         "plane_id int NOT NULL," +
         "FOREIGN KEY (plane_id)" +
         "   REFERENCES Plane(id)" +
-        "   ON DELETE CASCADE" +
         "   ON UPDATE CASCADE);";
 
     try {
@@ -83,7 +82,7 @@ public class Flight implements ITable {
     DFlight data = (DFlight) object;
 
     String insertQuery = "INSERT INTO Flight (economy_seats,bussiness_class_seats,to_location,from_location,economy_price,bussiness_class_price,departure_time,arriving_time,plane_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    String idQuery = "SELECT LAST_INSERT_ID()";
+    String idQuery = "SELECT LAST_INSERT_ID();";
 
     try {
       pstmt = conn.prepareStatement(insertQuery);
@@ -94,7 +93,7 @@ public class Flight implements ITable {
       pstmt.setString(4, data.fromLocation);
       pstmt.setInt(5, data.economyPrice);
       pstmt.setInt(6, data.bussinessClassPrice);
-      pstmt.setTimestamp(7,data.departureTime );
+      pstmt.setTimestamp(7, data.departureTime);
       pstmt.setTimestamp(8, data.arrivingTime);
       pstmt.setInt(9, data.planeId);
 
@@ -102,7 +101,6 @@ public class Flight implements ITable {
       int rowsInserted = pstmt.executeUpdate();
 
       if (rowsInserted > 0) {
-        // If the insertion was successful, retrieving the ID of the newly inserted row
         rs = stmt.executeQuery();
         if (rs.next()) {
           object.id = rs.getInt(1);
@@ -148,7 +146,7 @@ public class Flight implements ITable {
       pstmt.setTimestamp(7, data.departureTime);
       pstmt.setTimestamp(8, data.arrivingTime);
       pstmt.setInt(9, data.planeId);
-      pstmt.setInt(10,id);
+      pstmt.setInt(10, id);
 
       // Executing the insert query
       pstmt.executeUpdate();
@@ -172,21 +170,21 @@ public class Flight implements ITable {
     String query = "DELETE FROM Flight WHERE id = ?";
     PreparedStatement stmt = null;
 
-    try  {
+    try {
       stmt = conn.prepareStatement(query);
       stmt.setInt(1, id);
       int rowsAffected = stmt.executeUpdate();
       System.out.println("Rows affected: " + rowsAffected);
 
-    } catch (SQLException e) { 
+    } catch (SQLException e) {
       e.printStackTrace();
     } finally {
 
-    if (stmt != null){
-      try{
-        stmt.close();
-        } catch (SQLException e) { 
-        e.printStackTrace();
+      if (stmt != null) {
+        try {
+          stmt.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
         }
       }
     }

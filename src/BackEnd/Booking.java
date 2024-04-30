@@ -38,17 +38,14 @@ public class Booking implements ITable {
         "flight_id int NOT NULL," +
         "FOREIGN KEY (flight_id)" +
         "   REFERENCES Flight(id)" +
-        "   ON DELETE CASCADE" +
         "   ON UPDATE CASCADE," +
         "login_id int NOT NULL," +
         "FOREIGN KEY (login_id)" +
         "   REFERENCES Login(id)" +
-        "   ON DELETE CASCADE" +
         "   ON UPDATE CASCADE," +
         "payment_id int NOT NULL," +
         "FOREIGN KEY (payment_id)" +
         "   REFERENCES Payment(id)" +
-        "   ON DELETE CASCADE" +
         "   ON UPDATE CASCADE);";
 
     try {

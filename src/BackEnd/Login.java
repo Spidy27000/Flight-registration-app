@@ -36,7 +36,6 @@ public class Login implements ITable {
         "passenger_id int NOT NULL," +
         "FOREIGN KEY (passenger_id)" +
         "   REFERENCES Passenger(id)" +
-        "   ON DELETE CASCADE" +
         "   ON UPDATE CASCADE);";
     try {
       stmt = conn.createStatement();
