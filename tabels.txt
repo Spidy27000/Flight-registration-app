@@ -1,0 +1,47 @@
+Vbgyor
+
+Login
+pK->id
+  ->email
+  ->password
+fK->registration_id
+
+Registration
+pK->id
+  ->name
+  ->age
+  ->date of birth
+  ->address
+  ->phone no
+  -> passport number
+
+Plane
+pK->id
+  ->name
+  ->no of economy seats
+  ->no of bussiness class seats
+
+Booking
+pK->id
+  ->economy Seats
+  ->bussiness class Seats
+fK->flight_id
+fK->login_id
+fK->payment_id
+
+flight
+pK->id
+fK->plane_id
+  ->to 
+  ->from 
+  ->departure Time
+  ->arriving time
+  ->avalable economy seats
+  ->avalable bussiness class seats
+
+Payment
+pK-> id
+  -> amount
+  -> mode
+  -> number_of_economy_seats
+  -> number_of_bussiness class

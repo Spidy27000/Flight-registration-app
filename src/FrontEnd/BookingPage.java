@@ -7,9 +7,10 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class BookingPage extends JFrame implements ActionListener {
+public class BookingPage extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
     Container container;
     JLabel needLabel = new JLabel("Please enter how many tickets are needed");
@@ -30,11 +31,11 @@ public class BookingPage extends JFrame implements ActionListener {
         setLocationAndSize();
         addComponentsToContainer();
         addActionEvent();
-        setTitle("Update Form");
+        
         setVisible(true);
         // frame.setBounds(10, 10, 370, 600);
         setSize(370, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
         // frame.setResizable(false);
     }
 
