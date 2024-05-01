@@ -3,6 +3,7 @@ package BackEnd;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 public class Db {
   private static Db inst;
@@ -138,14 +139,13 @@ public class Db {
    * @return
    *         format name,to,from,departure,arival,economy prize,bussness class price
    */
-  public Map<String, String>[] getAvailableFlights(String from, String to) {
+  public Vector<Map<String, String>> getAvailableFlights(String from, String to) {
     PreparedStatement pstmt = null;
     ResultSet rs = null;
-    @SuppressWarnings("unchecked")
-    Map<String, String>[] ret = new HashMap[10]; // Initialize the array to store flight details
+    Vector<Map<String, String>> ret = new Vector<>(); // Initialize the array to store flight details
 
     try {
-      String query = "SELECT f.id p.name, f.to_location, f.from_location, f.departure_time, f.arriving_time, f.economy_prize, f.bussiness_class_prize "
+      String query = "SELECT f.id ,p.name, f.to_location, f.from_location, f.departure_time, f.arriving_time, f.economy_price, f.bussiness_class_price "
           + "FROM Flight f, Plane p "
           + "WHERE f.plane_id = p.id AND f.from_location = ? AND f.to_location = ?";
 
@@ -156,6 +156,7 @@ public class Db {
       rs = pstmt.executeQuery();
 
       int index = 0;
+      System.out.println(from + " " +to );
       while (rs.next()) {
         Map<String, String> flightDetails = new HashMap<>();
         flightDetails.put("FlightName", rs.getString("name"));
@@ -164,13 +165,13 @@ public class Db {
         Timestamp departureTime= rs.getTimestamp("departure_time");
         flightDetails.put("DepartureTime", departureTime.toString());
         flightDetails.put("ArrivalTime", rs.getTimestamp("arriving_time").toString());
-        flightDetails.put("EconomyPrice", Integer.toString(rs.getInt("economy_prize")));
-        flightDetails.put("BusinessClassPrice", Integer.toString(rs.getInt("bussiness_class_prize")));
-        flightDetails.put("FlightId", Integer.toString(rs.getInt("id")));
+        flightDetails.put("EconomyPrice", Integer.toString(rs.getInt("economy_price")));
+        flightDetails.put("BusinessClassPrice", Integer.toString(rs.getInt("bussiness_class_price")));
+        flightDetails.put("id", Integer.toString(rs.getInt("id")));
         Date date = new Date(departureTime.getTime());
         flightDetails.put("Date", date.toString());
 
-        ret[index++] = flightDetails;
+        ret.add(flightDetails);
         if (index >= 10)
           break;
       }

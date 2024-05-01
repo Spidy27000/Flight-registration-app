@@ -3,12 +3,15 @@ package FrontEnd;
 import javax.swing.*;
 import javax.swing.border.Border;
 
+import BackEnd.Db;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
+import java.util.Vector;
 
-class PlanePanal extends JPanel implements ActionListener {
+class FlightPanel extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
 
     JLabel flightLabel = new JLabel("Flight name:");
@@ -20,10 +23,13 @@ class PlanePanal extends JPanel implements ActionListener {
     JLabel buspriceLabel = new JLabel("BUSINESS PRICE:");
     JButton bookButton = new JButton("BOOK");
     JLabel dateLabel = new JLabel("DATE:");
-   
-    int flightId;
 
-    public PlanePanal(int id, int flightId) {
+    int flightId;
+    HomePage app;
+
+    public FlightPanel(int id, int flightId, HomePage app) {
+        this.app =app;
+        this.flightId = flightId;
         Border border = BorderFactory.createLineBorder(Color.BLACK, 2);
         setBorder(border);
         setLayout(null);
@@ -31,24 +37,25 @@ class PlanePanal extends JPanel implements ActionListener {
         addComponents();
         addActionEvent();
         setVisible(true); // Ensure the panel is visible
-        setBounds((150 *id) + 100, 200, 1350, 100); // Adjust position and size of Panel_1
+        setBounds(100, 200 + (id * 120), 1350, 100); // Adjust position and size of Panel_1
     }
-    public void FillData(Map<String, String> data){
-        flightLabel.setText("Name: "+data.get("FlightName"));
-        fromLabel.setText("From: "+data.get("FromLocation"));
-        toLabel.setText("To: "+ data.get("ToLocation"));
-        departureLabel.setText("Departure: "+ data.get("DepartureTime"));
-        arrivalLabel.setText("Arrival: "+data.get("ArrivalTime"));
-        ecopriceLabel.setText("Economey Price: "+data.get("EconomyPrice"));
-        buspriceLabel.setText("Bussness Price: "+data.get("Buss"));
-        dateLabel.setText("Date: "+data.get("Date"));
+
+    public void FillData(Map<String, String> data) {
+        flightLabel.setText("Name: " + data.get("FlightName"));
+        fromLabel.setText("From: " + data.get("FromLocation"));
+        toLabel.setText("To: " + data.get("ToLocation"));
+        departureLabel.setText("Departure: " + data.get("DepartureTime"));
+        arrivalLabel.setText("Arrival: " + data.get("ArrivalTime"));
+        ecopriceLabel.setText("Economey Price: " + data.get("EconomyPrice"));
+        buspriceLabel.setText("Bussness Price: " + data.get("Buss"));
+        dateLabel.setText("Date: " + data.get("Date"));
     }
 
     public void setLocationAndSize() {
         flightLabel.setBounds(70, 10, 100, 30);
         fromLabel.setBounds(40, 40, 100, 30);
         toLabel.setBounds(140, 40, 100, 30);
-        dateLabel.setBounds(400,10,100,30);
+        dateLabel.setBounds(400, 10, 100, 30);
         departureLabel.setBounds(280, 50, 150, 30);
         arrivalLabel.setBounds(450, 50, 150, 30);
         ecopriceLabel.setBounds(680, 30, 150, 30);
@@ -74,12 +81,12 @@ class PlanePanal extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == bookButton){
+        if (e.getSource() == bookButton) {
+            app.app.showBooking(app.id,  flightId);
         }
     }
 
 }
-
 
 public class HomePage extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -92,15 +99,22 @@ public class HomePage extends JPanel implements ActionListener {
     JButton accountButton = new JButton("ACCOUNT");
     JButton ticketButton = new JButton("TICKET BOOKED");
     MainFrontApp app;
+    Db db;
+    FlightPanel f;
     int id;
+    JPanel flightPanel = new JPanel();
 
     public HomePage(MainFrontApp app) {
+        f = new FlightPanel(2, 1,this);
         this.app = app;
         setLayout(null);
+        flightPanel.setLayout(null);
         setLocationAndSize();
         addComponentsToContainer();
         addActionEvent();
         setBounds(100, 200, 1350, 100); // Adjust position and size of Panel_1
+        db = Db.getInst();
+        
     }
 
     public void setLocationAndSize() {
@@ -113,6 +127,7 @@ public class HomePage extends JPanel implements ActionListener {
         findButton.setBounds(950, 120, 100, 30);
         accountButton.setBounds(1400, 10, 100, 30);
         ticketButton.setBounds(1225, 10, 150, 30);
+        flightPanel.setBounds(300,200,120,400);
     }
 
     public void addComponentsToContainer() {
@@ -123,6 +138,8 @@ public class HomePage extends JPanel implements ActionListener {
         add(findButton);
         add(accountButton);
         add(ticketButton);
+        add(flightPanel);
+        add(f);
     }
 
     public void addActionEvent() {
@@ -133,9 +150,34 @@ public class HomePage extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == accountButton){
+
+        if (e.getSource() == accountButton) {
             app.showUpdate(this.id);
         }
+        if (e.getSource() == findButton) {
+            if (toTextField.getText() == "") {
+                JOptionPane.showMessageDialog(this, " To field should not be empty");
+            }
+            String to = toTextField.getText();
+            if (fromTextField.getText() == "") {
+                JOptionPane.showMessageDialog(this, " From field should not be empty");
+            }
+            String from = fromTextField.getText();
+            Vector<Map<String,String>> data = db.getAvailableFlights(from, to);
+            if (data.size() == 0) {
+                JOptionPane.showMessageDialog(this, "No available Flights");
+            } 
+            /* 
+            for(int i = 0; i<data.size();i++){
+                int flightId = Integer.parseInt(data.get(i).get("id"));
+                FlightPanel fPanel = new FlightPanel(i,flightId, this);
+                fPanel.FillData(data.get(i));
+                fPanel.setBackground(new Color(127 ));
+                flightPanel.add(fPanel);
+            }  
+            */
+            System.out.println(data.size());
 
+        }
     }
 }
