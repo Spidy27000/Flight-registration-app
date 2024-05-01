@@ -180,7 +180,7 @@ public class HomePage extends JPanel implements ActionListener {
                 fPanel.setVisible(true);
                 fPanel.FillData(data.get(i));
                 add(fPanel);
-                fPanel.setBounds(300,200 + (i * 120), 1295, 100);
+                fPanel.setBounds(150,200 + (i * 120), 1295, 100);
             }
             System.out.println(data.size());
 
