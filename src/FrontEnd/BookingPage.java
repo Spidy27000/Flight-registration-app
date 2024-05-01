@@ -7,8 +7,11 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import BackEnd.Db;
 
 public class BookingPage extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -23,20 +26,21 @@ public class BookingPage extends JPanel implements ActionListener {
 
     JButton checkButton = new JButton("CHECK PRICE");
     JButton bookButton = new JButton("BOOK");
+    JButton cancelButton = new JButton("CANCEL");
+    int loginId, flightId;
+    int ammont;
 
     MainFrontApp app;
+    Db db;
 
-    public BookingPage() {
+    public BookingPage(MainFrontApp app) {
+        this.app = app;
+        this.db = Db.getInst();
         setLayout(null);
         setLocationAndSize();
         addComponentsToContainer();
         addActionEvent();
-        
         setVisible(true);
-        // frame.setBounds(10, 10, 370, 600);
-        setSize(370, 600);
-        
-        // frame.setResizable(false);
     }
 
     public void setLocationAndSize() {
@@ -53,10 +57,12 @@ public class BookingPage extends JPanel implements ActionListener {
 
         checkButton.setBounds(710, 500, 150, 30);
         bookButton.setBounds(710, 570, 150, 30);
+        cancelButton.setBounds(710, 640, 150, 30);
 
     }
 
-    public void AddDataToFead() {
+    public void UpdatePrice(int ammont) {
+        priceLabel.setText("Price = " + ammont);
 
     }
 
@@ -69,15 +75,82 @@ public class BookingPage extends JPanel implements ActionListener {
         add(checkButton);
         add(priceLabel);
         add(bookButton);
+        add(cancelButton);
     }
 
     public void addActionEvent() {
         bookButton.addActionListener(this);
         checkButton.addActionListener(this);
+        cancelButton.addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == bookButton) {
+            if (ecoTextField.getText() == "") {
+                JOptionPane.showMessageDialog(this, " Enter number of economey tickets ");
+                return;
+            }
+            if (bussTextField.getText() == "") {
+                JOptionPane.showMessageDialog(this, " Enter number of business tickets");
+                return;
+            }
+            int economy;
+            try {
+                economy = Integer.parseInt(ecoTextField.getText());
+            } catch (NumberFormatException err) {
+                JOptionPane.showMessageDialog(this, "enter economoey seats in numaric form");
+                return;
+            }
+            int business;
+            try {
+                business = Integer.parseInt(bussTextField.getText());
+            } catch (NumberFormatException err) {
+                JOptionPane.showMessageDialog(this, "enter business seats in numaric form");
+                return;
+            }
+            if(db.isSeatAvailable(flightId, economy, business) == false) {
+                JOptionPane.showMessageDialog(this, "No seats available");
+                return;
+            }
+            int ammont = db.calculateAmount(flightId, economy, business);
+            app.showPayment(loginId, flightId, economy, business, ammont);
+
+        }
+        if (e.getSource() == checkButton) {
+            if (ecoTextField.getText() == "") {
+                JOptionPane.showMessageDialog(this, " Enter number of economey tickets ");
+                return;
+            }
+            if (bussTextField.getText() == "") {
+                JOptionPane.showMessageDialog(this, " Enter number of business tickets");
+                return;
+            }
+            int economy;
+            try {
+                economy = Integer.parseInt(ecoTextField.getText());
+            } catch (NumberFormatException err) {
+                JOptionPane.showMessageDialog(this, "enter economoey seats in numaric form");
+                return;
+            }
+            int business;
+            try {
+                business = Integer.parseInt(bussTextField.getText());
+            } catch (NumberFormatException err) {
+                JOptionPane.showMessageDialog(this, "enter business seats in numaric form");
+                return;
+            }
+            if(db.isSeatAvailable(flightId, economy, business) == false) {
+                JOptionPane.showMessageDialog(this, "No seats available");
+                return;
+            }
+            int ammont = db.calculateAmount(flightId, economy, business);
+            UpdatePrice(ammont);
+
+        }
+        if (e.getSource() == cancelButton) {
+            app.showHome(loginId);
+        }
 
     }
 }

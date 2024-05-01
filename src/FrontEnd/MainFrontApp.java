@@ -11,6 +11,8 @@ public class MainFrontApp extends JFrame {
   private SignUpPage signUpPage;
   private HomePage homePage;
   private UpdatePage updatePage;
+  private BookingPage bookingPage;
+  private PaymentPage paymentPage;
   private CardLayout cardLayout;
   private JPanel cardPanel;
 
@@ -22,7 +24,8 @@ public class MainFrontApp extends JFrame {
     this.signUpPage = new SignUpPage(this);
     this.homePage = new HomePage(this);
     this.updatePage = new UpdatePage(this);
-
+    this.bookingPage = new BookingPage(this);
+    this.paymentPage = new PaymentPage(this);
 
     cardLayout = new CardLayout();
     cardPanel = new JPanel();
@@ -31,6 +34,8 @@ public class MainFrontApp extends JFrame {
     cardPanel.add(this.signUpPage, "signup");
     cardPanel.add(this.homePage,"home");
     cardPanel.add(this.updatePage,"update");
+    cardPanel.add(this.bookingPage,"booking");
+    cardPanel.add(this.paymentPage,"payment");
     cardPanel.setBorder(null);
     cardLayout.show(cardPanel, "login");
     getContentPane().setLayout(new BorderLayout());
@@ -64,7 +69,23 @@ public class MainFrontApp extends JFrame {
   }
 
   public void showBooking(int loginId , int flightId){
+    cardLayout.show(cardPanel, "booking");
+    setTitle("Booking");
+    bookingPage.loginId = loginId;
+    bookingPage.flightId = flightId;
+
     
   }
+
+public void showPayment(int loginId, int flightId, int economy, int business, int ammount) {
+  cardLayout.show(cardPanel, "payment");
+  setTitle("Payment");
+  paymentPage.loginId = loginId;
+  paymentPage.flightId = flightId;
+  paymentPage.economy = economy;
+  paymentPage.business = business;
+  paymentPage.ammount = ammount;
+}
+
 
 }

@@ -132,7 +132,7 @@ public class Flight implements ITable {
     PreparedStatement pstmt = null;
     DFlight data = (DFlight) object;
 
-    String updateQuery = "UPDATE Flight SET economy_seats = ?, bussness_class_seats = ?, to_location = ?, from_loaction = ?, economy_price = ?, bussness_class_price = ?, departure_time = ?, arriving_time = ?, plane_id = ? WHERE id = ?";
+    String updateQuery = "UPDATE Flight SET economy_seats = ?, bussness_class_seats = ?, to_location = ?, from_loaction = ?, economy_price = ?, bussness_class_price = ?, departure_time = ?, arriving_time = ? WHERE id = ?";
 
     try {
       pstmt = conn.prepareStatement(updateQuery);
@@ -145,8 +145,7 @@ public class Flight implements ITable {
       pstmt.setInt(6, data.bussinessClassPrice);
       pstmt.setTimestamp(7, data.departureTime);
       pstmt.setTimestamp(8, data.arrivingTime);
-      pstmt.setInt(9, data.planeId);
-      pstmt.setInt(10, id);
+      pstmt.setInt(9, id);
 
       // Executing the insert query
       pstmt.executeUpdate();

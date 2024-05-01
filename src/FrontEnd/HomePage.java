@@ -27,7 +27,7 @@ class FlightPanel extends JPanel implements ActionListener {
     int flightId;
     HomePage app;
 
-    public FlightPanel(int id, int flightId, HomePage app) {
+    public FlightPanel(int flightId, HomePage app) {
         this.app =app;
         this.flightId = flightId;
         Border border = BorderFactory.createLineBorder(Color.BLACK, 2);
@@ -45,19 +45,19 @@ class FlightPanel extends JPanel implements ActionListener {
         departureLabel.setText("Departure: " + data.get("DepartureTime"));
         arrivalLabel.setText("Arrival: " + data.get("ArrivalTime"));
         ecopriceLabel.setText("Economey Price: " + data.get("EconomyPrice"));
-        buspriceLabel.setText("Bussness Price: " + data.get("Buss"));
+        buspriceLabel.setText("Bussness Price: " + data.get("BusinessClassPrice"));
         dateLabel.setText("Date: " + data.get("Date"));
     }
 
     public void setLocationAndSize() {
-        flightLabel.setBounds(70, 10, 100, 30);
+        flightLabel.setBounds(70, 10, 200, 30);
         fromLabel.setBounds(40, 40, 100, 30);
-        toLabel.setBounds(140, 40, 100, 30);
-        dateLabel.setBounds(400, 10, 100, 30);
+        toLabel.setBounds(170, 40, 100, 30);
+        dateLabel.setBounds(350, 10, 200, 30);
         departureLabel.setBounds(280, 50, 150, 30);
         arrivalLabel.setBounds(450, 50, 150, 30);
-        ecopriceLabel.setBounds(680, 30, 150, 30);
-        buspriceLabel.setBounds(950, 30, 150, 30);
+        ecopriceLabel.setBounds(680, 30, 175, 30);
+        buspriceLabel.setBounds(950, 30, 170, 30);
         bookButton.setBounds(1180, 30, 100, 30);
     }
 
@@ -127,8 +127,6 @@ public class HomePage extends JPanel implements ActionListener {
         findButton.setBounds(950, 120, 100, 30);
         accountButton.setBounds(1400, 10, 100, 30);
         ticketButton.setBounds(1225, 10, 150, 30);
-        
-        //flightPanel.setBounds(300,200,1200,400);
     }
 
     public void addComponentsToContainer() {
@@ -139,7 +137,6 @@ public class HomePage extends JPanel implements ActionListener {
         add(findButton);
         add(accountButton);
         add(ticketButton);
-        //add(flightPanel);
     }
 
     public void addActionEvent() {
@@ -157,32 +154,34 @@ public class HomePage extends JPanel implements ActionListener {
         if (e.getSource() == findButton) {
             if (toTextField.getText() == "") {
                 JOptionPane.showMessageDialog(this, " To field should not be empty");
+                return;
             }
             String to = toTextField.getText();
             if (fromTextField.getText() == "") {
                 JOptionPane.showMessageDialog(this, " From field should not be empty");
+                return;
             }
             String from = fromTextField.getText();
             Vector<Map<String,String>> data = db.getAvailableFlights(from, to);
             if (data.size() == 0) {
                 JOptionPane.showMessageDialog(this, "No available Flights");
-            } 
-            FlightPanel f = new FlightPanel(1, 1 , this);
+                return;
+            }
+            /*  
+            FlightPanel f = new FlightPanel( 1 , this);
             f.setVisible(true);
             f.setBackground(Color.YELLOW);
             add(f);
             f.setBounds(150,300,1295, 100);
-           /*  
+            */
             for(int i = 0; i<data.size();i++){
                 int flightId = Integer.parseInt(data.get(i).get("id"));
-                FlightPanel fPanel = new FlightPanel(i,flightId, this);
-                fPanel.FillData(data.get(i));
-                fPanel.setBackground(new Color(0));
-                fPanel.setBounds(300,200 + (i * 120), 120, 100);
+                FlightPanel fPanel = new FlightPanel(flightId, this);
                 fPanel.setVisible(true);
-                flightPanel.add(fPanel);
+                fPanel.FillData(data.get(i));
+                add(fPanel);
+                fPanel.setBounds(300,200 + (i * 120), 1295, 100);
             }
-            */  
             System.out.println(data.size());
 
         }
