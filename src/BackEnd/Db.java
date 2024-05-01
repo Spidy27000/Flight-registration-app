@@ -637,7 +637,10 @@ public class Db {
   }
 
   public void bookTicket(int loginId, int flightId, int economySeats, int bussinessClassSeats, String mode) {
-    // TODO Auto-generated method stub
+    int ammount = calculateAmount(flightId, economySeats, bussinessClassSeats);
+    IData paymenData= new DPayment(mode, ammount, loginId);
+    tables[Table.PAYMENT.val].Insert(paymenData);
+    
 
   }
 

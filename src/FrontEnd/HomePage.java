@@ -147,6 +147,9 @@ public class HomePage extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == ticketButton){
+            app.showTicketBooked(this.id);
+        }
 
         if (e.getSource() == accountButton) {
             app.showUpdate(this.id);

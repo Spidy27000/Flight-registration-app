@@ -113,8 +113,7 @@ public class BookingPage extends JPanel implements ActionListener {
                 JOptionPane.showMessageDialog(this, "No seats available");
                 return;
             }
-            int ammont = db.calculateAmount(flightId, economy, business);
-            app.showPayment(loginId, flightId, economy, business, ammont);
+            app.showPayment(loginId, flightId, economy, business);
 
         }
         if (e.getSource() == checkButton) {

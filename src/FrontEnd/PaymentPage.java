@@ -10,6 +10,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+import BackEnd.Db;
+
 public class PaymentPage extends JPanel implements ActionListener {
   private static final long serialVersionUID = 1L;
   JLabel pleaseLabel = new JLabel("Please select your prefered payment method ");
@@ -21,12 +23,14 @@ public class PaymentPage extends JPanel implements ActionListener {
   JRadioButton cardsButton = new JRadioButton("CARDS");
 
   JButton paymentButton = new JButton("PAY");
-  int loginId, flightId, economy, business, ammount;
+  int loginId, flightId, economy, business ;
 
   MainFrontApp app;
+  Db db;
 
   public PaymentPage(MainFrontApp app) {
     this.app = app;
+    db = Db.getInst();
     setLayout(null);
     setLocationAndSize();
     addComponentsToContainer();
@@ -70,6 +74,7 @@ public class PaymentPage extends JPanel implements ActionListener {
     if (e.getSource() == paymentButton) {
       if (buttonGroup.getSelection() == null) {
         JOptionPane.showMessageDialog(null, "Please select a Payment Method");
+        return;
       }
       String mode;
       if (buttonGroup.getSelection().equals(upiButton.getModel())) {
@@ -78,9 +83,10 @@ public class PaymentPage extends JPanel implements ActionListener {
         mode = "Net Banking";
       } else if (buttonGroup.getSelection().equals(cardsButton.getModel())) {
         mode = "Card";
-        System.out.println("Cards selected");
+      } else{
+        mode = "";
       }
-      
+      db.bookTicket(loginId, flightId, economy, business, mode);
 
     }
 

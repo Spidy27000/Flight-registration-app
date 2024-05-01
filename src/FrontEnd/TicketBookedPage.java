@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
 
-class Plane1Panal extends JPanel implements ActionListener {
+class MyTicket extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
 
     JLabel flightLabel = new JLabel("Flight name:");
@@ -23,7 +23,7 @@ class Plane1Panal extends JPanel implements ActionListener {
    
     int flightId;
 
-    public Plane1Panal(int id, int flightId) {
+    public MyTicket(int id, int flightId) {
         Border border = BorderFactory.createLineBorder(Color.BLACK, 2);
         setBorder(border);
         setLayout(null);
@@ -81,7 +81,7 @@ class Plane1Panal extends JPanel implements ActionListener {
 }
 
 
-public class TicketBooked extends JPanel implements ActionListener {
+public class TicketBookedPage extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
     
     JLabel HeadLabel = new JLabel("THESE ARE THE TICKETS YOU HAVE BOOKED");
@@ -89,9 +89,10 @@ public class TicketBooked extends JPanel implements ActionListener {
     JButton Homebutton = new JButton("HOME");
 
     MainFrontApp app;
+    int loginId;
     int id;
 
-    public TicketBooked(MainFrontApp app) {
+    public TicketBookedPage(MainFrontApp app) {
         this.app = app;
         setLayout(null);
         setLocationAndSize();
@@ -120,7 +121,7 @@ public class TicketBooked extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == Homebutton){
-            app.showUpdate(this.id);
+            app.showHome(this.id);
         }
 
     }
