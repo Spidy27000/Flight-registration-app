@@ -36,8 +36,6 @@ class FlightPanel extends JPanel implements ActionListener {
         setLocationAndSize();
         addComponents();
         addActionEvent();
-        setVisible(true); // Ensure the panel is visible
-        setBounds(100, 200 + (id * 120), 1350, 100); // Adjust position and size of Panel_1
     }
 
     public void FillData(Map<String, String> data) {
@@ -100,18 +98,20 @@ public class HomePage extends JPanel implements ActionListener {
     JButton ticketButton = new JButton("TICKET BOOKED");
     MainFrontApp app;
     Db db;
-    FlightPanel f;
     int id;
-    JPanel flightPanel = new JPanel();
+    //JPanel flightPanel = new JPanel();
 
     public HomePage(MainFrontApp app) {
-        f = new FlightPanel(2, 1,this);
         this.app = app;
         setLayout(null);
-        flightPanel.setLayout(null);
+        //flightPanel.setLayout(null);
         setLocationAndSize();
         addComponentsToContainer();
         addActionEvent();
+        setVisible(true); // Ensure the panel is visible
+        //flightPanel.setVisible(true);
+        //flightPanel.setBackground(Color.YELLOW); 
+  
         setBounds(100, 200, 1350, 100); // Adjust position and size of Panel_1
         db = Db.getInst();
         
@@ -127,7 +127,8 @@ public class HomePage extends JPanel implements ActionListener {
         findButton.setBounds(950, 120, 100, 30);
         accountButton.setBounds(1400, 10, 100, 30);
         ticketButton.setBounds(1225, 10, 150, 30);
-        flightPanel.setBounds(300,200,120,400);
+        
+        //flightPanel.setBounds(300,200,1200,400);
     }
 
     public void addComponentsToContainer() {
@@ -138,8 +139,7 @@ public class HomePage extends JPanel implements ActionListener {
         add(findButton);
         add(accountButton);
         add(ticketButton);
-        add(flightPanel);
-        add(f);
+        //add(flightPanel);
     }
 
     public void addActionEvent() {
@@ -167,15 +167,22 @@ public class HomePage extends JPanel implements ActionListener {
             if (data.size() == 0) {
                 JOptionPane.showMessageDialog(this, "No available Flights");
             } 
-            /* 
+            FlightPanel f = new FlightPanel(1, 1 , this);
+            f.setVisible(true);
+            f.setBackground(Color.YELLOW);
+            add(f);
+            f.setBounds(150,300,1295, 100);
+           /*  
             for(int i = 0; i<data.size();i++){
                 int flightId = Integer.parseInt(data.get(i).get("id"));
                 FlightPanel fPanel = new FlightPanel(i,flightId, this);
                 fPanel.FillData(data.get(i));
-                fPanel.setBackground(new Color(127 ));
+                fPanel.setBackground(new Color(0));
+                fPanel.setBounds(300,200 + (i * 120), 120, 100);
+                fPanel.setVisible(true);
                 flightPanel.add(fPanel);
-            }  
-            */
+            }
+            */  
             System.out.println(data.size());
 
         }
