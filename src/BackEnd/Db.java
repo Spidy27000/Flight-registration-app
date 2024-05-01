@@ -640,7 +640,30 @@ public class Db {
     int ammount = calculateAmount(flightId, economySeats, bussinessClassSeats);
     IData paymenData= new DPayment(mode, ammount, loginId);
     tables[Table.PAYMENT.val].Insert(paymenData);
-    
+    IData bookingData = new DBooking(economySeats, bussinessClassSeats,flightId,loginId,paymenData.id);
+    tables[Table.BOOKING.val].Insert(bookingData);
+
+    PreparedStatement pstmt = null;
+    String query = "Update Flight set economy_seats = economy_seat=? ,bussiness_class_seats = bussiness_class_seats - ? where id = ?";
+    try{
+      pstmt = conn.prepareStatement(query);
+      pstmt.setInt(1, economySeats);
+      pstmt.setInt(2, bussinessClassSeats);
+      pstmt.setInt(3, flightId);
+      pstmt.executeUpdate();
+    }catch (SQLException e){
+      e.printStackTrace();
+    }
+    finally {
+      try {
+        if (pstmt != null) {
+          pstmt.close();
+        }
+      } catch (SQLException e) {
+        e.getStackTrace();
+      }
+    }
+
 
   }
 

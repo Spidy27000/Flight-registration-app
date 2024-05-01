@@ -143,6 +143,10 @@ public class UpdatePage extends JPanel implements ActionListener {
 
   @Override
   public void actionPerformed(ActionEvent e) {
+    if (e.getSource() == cancleButton) {
+      app.showHome(loginId);
+      
+    }
     if (e.getSource() == confirmButton) {
       String emailText = emailTextField.getText();
       
