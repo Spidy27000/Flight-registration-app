@@ -47,13 +47,15 @@ class MyTicket extends JPanel implements ActionListener {
         toLabel.setText("To: "+ data.get("ToLocation"));
         departureLabel.setText("Departure: "+ data.get("DepartureTime"));
         arrivalLabel.setText("Arrival: "+data.get("ArrivalTime"));
-        
+        amountLabel.setText("Amount: " + data.get("Amount"));
         dateLabel.setText("Date: "+data.get("Date"));
+        ecoseatsLabel.setText("Economey Seats: " + data.get("EconomySeats"));
+        busseatsLabel.setText("Bussness Seats: " + data.get("BusinessClassSeats"));
         ammount =Integer.parseInt(data.get("Amount"));
         }
 
     public void setLocationAndSize() {
-        flightLabel.setBounds(70, 10, 100, 30);
+        flightLabel.setBounds(70, 10, 200, 30);
         fromLabel.setBounds(40, 40, 100, 30);
         toLabel.setBounds(140, 40, 100, 30);
         dateLabel.setBounds(400,10,100,30);
@@ -85,7 +87,7 @@ class MyTicket extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == cancle1Button){
-        int rs = JOptionPane.showConfirmDialog(null, "you will get rs"+ ammount +" as ur refund", "Confirmation",JOptionPane.YES_NO_OPTION);
+        int rs = JOptionPane.showConfirmDialog(null, "you will get rs"+ (ammount* 0.5) +" as ur refund", "Confirmation",JOptionPane.YES_NO_OPTION);
             if (rs == JOptionPane.YES_OPTION) {
                 db.cancelTicket(ticketId);
 
