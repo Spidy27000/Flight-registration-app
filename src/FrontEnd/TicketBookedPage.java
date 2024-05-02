@@ -12,15 +12,15 @@ class MyTicket extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
 
     JLabel flightLabel = new JLabel("Flight name:");
-    JLabel fromLabel = new JLabel("FROM");
+    JLabel fromLabel = new JLabel("FROM:");
     JLabel toLabel = new JLabel("TO:");
     JLabel departureLabel = new JLabel("DEPARTURE TIME:");
     JLabel arrivalLabel = new JLabel("ARRIVAL TIME:");
-    JLabel ecopriceLabel = new JLabel("ECONOMY PRICE:");
-    JLabel buspriceLabel = new JLabel("BUSINESS PRICE:");
+    JLabel ecoseatsLabel = new JLabel("ECONOMY PRICE:");
+    JLabel busseatsLabel = new JLabel("BUSINESS PRICE:");
     JButton cancle1Button = new JButton("CANCEL");
     JLabel dateLabel = new JLabel("DATE:");
-   
+    JLabel amountLabel = new JLabel("amount:");
     int flightId;
 
     public MyTicket(int flightId) {
@@ -39,8 +39,7 @@ class MyTicket extends JPanel implements ActionListener {
         toLabel.setText("To: "+ data.get("ToLocation"));
         departureLabel.setText("Departure: "+ data.get("DepartureTime"));
         arrivalLabel.setText("Arrival: "+data.get("ArrivalTime"));
-        ecopriceLabel.setText("Economey Price: "+data.get("EconomyPrice"));
-        buspriceLabel.setText("Bussness Price: "+data.get("Buss"));
+        
         dateLabel.setText("Date: "+data.get("Date"));
     }
 
@@ -51,8 +50,9 @@ class MyTicket extends JPanel implements ActionListener {
         dateLabel.setBounds(400,10,100,30);
         departureLabel.setBounds(280, 50, 150, 30);
         arrivalLabel.setBounds(440, 50, 150, 30);
-        ecopriceLabel.setBounds(670, 30, 150, 30);
-        buspriceLabel.setBounds(940, 30, 150, 30);
+        ecoseatsLabel.setBounds(670, 10, 150, 30);
+        busseatsLabel.setBounds(670, 50, 150, 30);
+        amountLabel.setBounds(940, 30, 150, 30);
         cancle1Button.setBounds(1150, 30, 110, 30);
     }
 
@@ -62,10 +62,11 @@ class MyTicket extends JPanel implements ActionListener {
         add(toLabel);
         add(departureLabel);
         add(arrivalLabel);
-        add(ecopriceLabel);
-        add(buspriceLabel);
+        add(ecoseatsLabel);
+        add(busseatsLabel);
         add(cancle1Button);
         add(dateLabel);
+        add(amountLabel);
     }
 
     public void addActionEvent() {
