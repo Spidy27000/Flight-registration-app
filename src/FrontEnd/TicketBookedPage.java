@@ -18,12 +18,12 @@ class MyTicket extends JPanel implements ActionListener {
     JLabel arrivalLabel = new JLabel("ARRIVAL TIME:");
     JLabel ecopriceLabel = new JLabel("ECONOMY PRICE:");
     JLabel buspriceLabel = new JLabel("BUSINESS PRICE:");
-    JButton cancle1Button = new JButton("CANCLE FLIGHT");
+    JButton cancle1Button = new JButton("CANCEL");
     JLabel dateLabel = new JLabel("DATE:");
    
     int flightId;
 
-    public MyTicket(int id, int flightId) {
+    public MyTicket(int flightId) {
         Border border = BorderFactory.createLineBorder(Color.BLACK, 2);
         setBorder(border);
         setLayout(null);
@@ -31,7 +31,7 @@ class MyTicket extends JPanel implements ActionListener {
         addComponents();
         addActionEvent();
         setVisible(true); // Ensure the panel is visible
-        setBounds((150 *id) + 100, 200, 1350, 100); // Adjust position and size of Panel_1
+        setBounds(150 + 100, 200, 1350, 100); // Adjust position and size of Panel_1
     }
     public void FillData(Map<String, String> data){
         flightLabel.setText("Name: "+data.get("FlightName"));
@@ -50,10 +50,10 @@ class MyTicket extends JPanel implements ActionListener {
         toLabel.setBounds(140, 40, 100, 30);
         dateLabel.setBounds(400,10,100,30);
         departureLabel.setBounds(280, 50, 150, 30);
-        arrivalLabel.setBounds(450, 50, 150, 30);
-        ecopriceLabel.setBounds(680, 30, 150, 30);
-        buspriceLabel.setBounds(950, 30, 150, 30);
-        cancle1Button.setBounds(1180, 30, 100, 30);
+        arrivalLabel.setBounds(440, 50, 150, 30);
+        ecopriceLabel.setBounds(670, 30, 150, 30);
+        buspriceLabel.setBounds(940, 30, 150, 30);
+        cancle1Button.setBounds(1150, 30, 110, 30);
     }
 
     public void addComponents() {
@@ -87,6 +87,7 @@ public class TicketBookedPage extends JPanel implements ActionListener {
     JLabel HeadLabel = new JLabel("THESE ARE THE TICKETS YOU HAVE BOOKED");
     
     JButton Homebutton = new JButton("HOME");
+    MyTicket book = new MyTicket(5);
 
     MainFrontApp app;
     int loginId;
@@ -103,14 +104,16 @@ public class TicketBookedPage extends JPanel implements ActionListener {
 
     public void setLocationAndSize() {
         HeadLabel.setBounds(515, 120, 300, 30);
-
-        Homebutton.setBounds(950, 120, 100, 30);
+        Homebutton.setBounds(1410, 30, 100, 30);
+        
+        book.setBounds(120,190,1295,100);
         
     }
 
     public void addComponentsToContainer() {
         add(HeadLabel);
         add(Homebutton);
+        add(book);
     }
 
     public void addActionEvent() {
