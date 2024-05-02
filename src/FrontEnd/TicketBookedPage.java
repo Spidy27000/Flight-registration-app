@@ -3,10 +3,13 @@ package FrontEnd;
 import javax.swing.*;
 import javax.swing.border.Border;
 
+import BackEnd.Db;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
+import java.util.Vector;
 
 class MyTicket extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -21,9 +24,14 @@ class MyTicket extends JPanel implements ActionListener {
     JButton cancle1Button = new JButton("CANCEL");
     JLabel dateLabel = new JLabel("DATE:");
     JLabel amountLabel = new JLabel("amount:");
-    int flightId;
-
-    public MyTicket(int flightId) {
+    int ticketId;
+    TicketBookedPage app;
+    int loginId;
+    int ammount;
+    Db db;
+    public MyTicket(TicketBookedPage app) {
+        db =  Db.getInst();
+        this.app = app;
         Border border = BorderFactory.createLineBorder(Color.BLACK, 2);
         setBorder(border);
         setLayout(null);
@@ -31,7 +39,7 @@ class MyTicket extends JPanel implements ActionListener {
         addComponents();
         addActionEvent();
         setVisible(true); // Ensure the panel is visible
-        setBounds(150 + 100, 200, 1350, 100); // Adjust position and size of Panel_1
+        setBounds(150 + 100, 200, 1350, 100); // Adjust position and size of Panel_
     }
     public void FillData(Map<String, String> data){
         flightLabel.setText("Name: "+data.get("FlightName"));
@@ -41,7 +49,8 @@ class MyTicket extends JPanel implements ActionListener {
         arrivalLabel.setText("Arrival: "+data.get("ArrivalTime"));
         
         dateLabel.setText("Date: "+data.get("Date"));
-    }
+        ammount =Integer.parseInt(data.get("Amount"));
+        }
 
     public void setLocationAndSize() {
         flightLabel.setBounds(70, 10, 100, 30);
@@ -76,6 +85,13 @@ class MyTicket extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == cancle1Button){
+        int rs = JOptionPane.showConfirmDialog(null, "you will get rs"+ ammount +" as ur refund", "Confirmation",JOptionPane.YES_NO_OPTION);
+            if (rs == JOptionPane.YES_OPTION) {
+                db.cancelTicket(ticketId);
+
+            this.app.app.showHome(loginId);
+        }
+
         }
     }
 
@@ -88,11 +104,11 @@ public class TicketBookedPage extends JPanel implements ActionListener {
     JLabel HeadLabel = new JLabel("THESE ARE THE TICKETS YOU HAVE BOOKED");
     
     JButton Homebutton = new JButton("HOME");
-    MyTicket book = new MyTicket(5);
 
     MainFrontApp app;
     int loginId;
     int id;
+    Db db = Db.getInst();
 
     public TicketBookedPage(MainFrontApp app) {
         this.app = app;
@@ -107,19 +123,33 @@ public class TicketBookedPage extends JPanel implements ActionListener {
         HeadLabel.setBounds(515, 120, 300, 30);
         Homebutton.setBounds(1410, 30, 100, 30);
         
-        book.setBounds(120,190,1295,100);
-        
     }
 
     public void addComponentsToContainer() {
         add(HeadLabel);
         add(Homebutton);
-        add(book);
     }
 
     public void addActionEvent() {
         Homebutton.addActionListener(this);
         
+    }
+    public void addTickets(int loginId){
+        Vector<Map<String,String>> data = db.getMyTickets(loginId);
+
+        for (int i = 0; i < data.size(); i++){
+            int id = Integer.parseInt(data.get(i).get("id"));
+            MyTicket ticket = new MyTicket(this);
+            ticket.setVisible(true);
+            ticket.FillData(data.get(i));
+            ticket.setBounds(120,190+(i*120),1295,100);
+            add(ticket);
+            ticket.ticketId = id; 
+            ticket.loginId = loginId;
+
+        }
+        
+
     }
 
     @Override

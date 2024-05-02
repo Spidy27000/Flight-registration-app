@@ -91,6 +91,7 @@ public class MainFrontApp extends JFrame {
   public void showTicketBooked(int loginId){
     cardLayout.show(cardPanel, "myTicket");
     setTitle("My Ticket");
+    ticketBookedPage.addTickets(loginId);
     ticketBookedPage.loginId = loginId;
 
   }

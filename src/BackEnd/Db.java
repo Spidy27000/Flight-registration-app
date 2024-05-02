@@ -29,7 +29,7 @@ public class Db {
     tables[Table.BOOKING.val] = new Booking(conn);
     CreateTables();
 
-    // insertFlightData();
+    insertFlightData();
 
   }
 
@@ -444,15 +444,14 @@ public class Db {
   }
 
   // to see number of tickets
-  public Map<String, Object>[] getMyTickets(int loginId) {
+  public Vector<Map<String, String>> getMyTickets(int loginId) {
     PreparedStatement pstmt = null;
     ResultSet rs = null;
-    @SuppressWarnings("unchecked")
-    Map<String, Object>[] ret = new HashMap[10]; // Initialize the array to store ticket details
+    Vector<Map<String, String>> ret = new Vector<>(); // Initialize the array to store ticket details
 
     try {
 
-      String query = "SELECT p.name, b.economy_seats, b.bussiness_class_seats, f.to_location, f.from_location, f.departure_time, f.arriving_time "
+      String query = "SELECT b.id,p.name, b.economy_seats, b.bussiness_class_seats, f.to_location, f.from_location, f.departure_time, f.arriving_time "
           +
           "FROM Flight f, Login l, Booking b, Plane p " +
           "WHERE l.id = b.login_id AND b.flight_id = f.id AND f.plane_id = p.id AND l.id = ?";
@@ -462,20 +461,27 @@ public class Db {
 
       rs = pstmt.executeQuery();
 
-      int index = 0;
       while (rs.next()) {
-        Map<String, Object> ticketDetails = new HashMap<>();
+        Map<String, String> ticketDetails = new HashMap<>();
         ticketDetails.put("FlightName", rs.getString("name"));
-        ticketDetails.put("EconomySeats", rs.getInt("economy_seats"));
-        ticketDetails.put("BusinessClassSeats", rs.getInt("bussiness_class_seats"));
+        int economy = rs.getInt("economy_seats");
+        int bussiness = rs.getInt("bussiness_class_seats");
+        ticketDetails.put("EconomySeats", Integer.toString(economy));
+        ticketDetails.put("BusinessClassSeats", Integer.toString(bussiness));
         ticketDetails.put("ToLocation", rs.getString("to_location"));
         ticketDetails.put("FromLocation", rs.getString("from_location"));
-        ticketDetails.put("DepartureTime", rs.getTimestamp("departure_time"));
-        ticketDetails.put("ArrivalTime", rs.getTimestamp("arriving_time"));
 
-        ret[index++] = ticketDetails;
-        if (index >= 10) // We've filled the array, break out of the loop
-          break;
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        Timestamp tempTime = rs.getTimestamp("departure_time");
+        ticketDetails.put("DepartureTime", sdf.format(tempTime));
+        ticketDetails.put("ArrivalTime", sdf.format(rs.getTimestamp("arriving_time")));
+        Date date = new Date(tempTime.getTime());
+        ticketDetails.put("Date", date.toString());
+        int fid = rs.getInt("id");
+        ticketDetails.put("id", Integer.toString(fid));
+        ticketDetails.put("Amount",Integer.toString(calculateAmount(fid,economy, bussiness)));
+
+        ret.add(ticketDetails);
       }
     } catch (SQLException e) {
       e.printStackTrace(); // Handle exceptions appropriately
@@ -535,14 +541,14 @@ public class Db {
     return ret;
   }
 
-
   public int cancelTicket(int bookingId) {
-    int ammount;
-    int paymentId;
+    int ammount = 0;
+    int paymentId = 0;
+    int economy = 0, business = 0, flightId = 0;
     PreparedStatement pstmt = null;
     ResultSet rs = null;
 
-    String query = "select p.id ,p.ammount from Payment p, Booking b where b.payment_id = p.id and b.id = ?";
+    String query = "select p.id ,p.ammount,b.economy_seats,b.bussiness_class_seats , b.flight_id from Payment p, Booking b where b.payment_id = p.id and b.id = ?";
     try {
       pstmt = conn.prepareStatement(query);
       pstmt.setInt(1, bookingId);
@@ -550,6 +556,9 @@ public class Db {
       if (rs.next()) {
         paymentId = rs.getInt(1);
         ammount = rs.getInt(2);
+        economy = rs.getInt(3);
+        business = rs.getInt(4);
+        flightId = rs.getInt(5);
       }
     } catch (SQLException e) {
       e.printStackTrace();
@@ -564,8 +573,26 @@ public class Db {
       } catch (SQLException e) {
         e.getStackTrace();
       }
-      ammount = 0;
-      paymentId = 0;
+    }
+    PreparedStatement pst = null;
+    String updatequery = "UPDATE Flight Set economy_seats = economy_seats + ? ,bussiness_class_seats = bussiness_class_seats+? WHERE id = ?";
+    try {
+      pst = conn.prepareStatement(updatequery);
+      pst.setInt(1, economy);
+      pst.setInt(2, business);
+      pst.setInt(3, flightId);
+      pst.executeUpdate();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (pst != null) {
+          pst.close();
+        }
+      } catch (SQLException e) {
+        e.getStackTrace();
+      }
+
     }
     tables[Table.BOOKING.val].Delete(bookingId);
     tables[Table.PAYMENT.val].Delete(paymentId);
@@ -574,36 +601,36 @@ public class Db {
   }
 
   public int calculateAmount(int flightId, int economySeats, int bussinessClassSeats) {
-      int ret = 0;
-      PreparedStatement pstmt = null;
-      ResultSet rs = null;
-      String query = "SELECT economy_price,bussiness_class_price From Flight WHERE id = ?";
-      try {
-        pstmt = conn.prepareStatement(query);
-        pstmt.setInt(1, flightId);
-        rs = pstmt.executeQuery();
-        if (rs.next()) {
-          int eco = rs.getInt("economy_price");
-          int bussiness = rs.getInt("bussiness_class_price");
-          ret = (eco * economySeats) + (bussinessClassSeats* bussiness);
+    int ret = 0;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+    String query = "SELECT economy_price,bussiness_class_price From Flight WHERE id = ?";
+    try {
+      pstmt = conn.prepareStatement(query);
+      pstmt.setInt(1, flightId);
+      rs = pstmt.executeQuery();
+      if (rs.next()) {
+        int eco = rs.getInt("economy_price");
+        int bussiness = rs.getInt("bussiness_class_price");
+        ret = (eco * economySeats) + (bussinessClassSeats * bussiness);
 
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (rs != null) {
+          rs.close();
+        }
+        if (pstmt != null) {
+          pstmt.close();
         }
       } catch (SQLException e) {
-        e.printStackTrace();
-      } finally {
-        try {
-          if (rs != null) {
-            rs.close();
-          }
-          if (pstmt != null) {
-            pstmt.close();
-          }
-        } catch (SQLException e) {
-          e.getStackTrace();
-        }
+        e.getStackTrace();
       }
-      return ret;
     }
+    return ret;
+  }
 
   public boolean isSeatAvailable(int flightId, int economySeats, int bussinessClassSeats) {
     boolean ret = false;
@@ -638,23 +665,22 @@ public class Db {
 
   public void bookTicket(int loginId, int flightId, int economySeats, int bussinessClassSeats, String mode) {
     int ammount = calculateAmount(flightId, economySeats, bussinessClassSeats);
-    IData paymenData= new DPayment(mode, ammount, loginId);
+    IData paymenData = new DPayment(mode, ammount, loginId);
     tables[Table.PAYMENT.val].Insert(paymenData);
-    IData bookingData = new DBooking(economySeats, bussinessClassSeats,flightId,loginId,paymenData.id);
+    IData bookingData = new DBooking(economySeats, bussinessClassSeats, flightId, loginId, paymenData.id);
     tables[Table.BOOKING.val].Insert(bookingData);
 
     PreparedStatement pstmt = null;
-    String query = "Update Flight set economy_seats = economy_seat=? ,bussiness_class_seats = bussiness_class_seats - ? where id = ?";
-    try{
+    String query = "Update Flight set economy_seats = economy_seats=? ,bussiness_class_seats = bussiness_class_seats - ? where id = ?";
+    try {
       pstmt = conn.prepareStatement(query);
       pstmt.setInt(1, economySeats);
       pstmt.setInt(2, bussinessClassSeats);
       pstmt.setInt(3, flightId);
       pstmt.executeUpdate();
-    }catch (SQLException e){
+    } catch (SQLException e) {
       e.printStackTrace();
-    }
-    finally {
+    } finally {
       try {
         if (pstmt != null) {
           pstmt.close();
@@ -663,7 +689,6 @@ public class Db {
         e.getStackTrace();
       }
     }
-
 
   }
 

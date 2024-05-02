@@ -74,7 +74,7 @@ public class Booking implements ITable {
     ResultSet rs = null;
     DBooking data = (DBooking) object;
 
-    String insertQuery = "INSERT INTO Booking (economy_seats,bussness_class_seats,flight_id,login_id,payment_id) VALUES (?, ?, ?,?,?)";
+    String insertQuery = "INSERT INTO Booking (economy_seats,bussiness_class_seats,flight_id,login_id,payment_id) VALUES (?, ?, ?,?,?)";
     String idQuery = "SELECT LAST_INSERT_ID()";
 
     try {

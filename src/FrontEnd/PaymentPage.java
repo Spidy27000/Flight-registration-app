@@ -87,6 +87,7 @@ public class PaymentPage extends JPanel implements ActionListener {
         mode = "";
       }
       db.bookTicket(loginId, flightId, economy, business, mode);
+      app.showHome(loginId);
 
     }
 
